@@ -1,0 +1,90 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+                <hr>
+                <div class="row">
+                    <div class="col col-md-5">
+                        <div class="form-group row">
+                            <label for="" class="col-md-auto col-form-label"><strong>Veículo / Placa:</strong></label>
+                            <div class="col-md-auto">
+                                <input type="text" name='km_saida' value="{{locacao.veiculo.placa}}" class="form-control" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-md-7">
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 col-form-label"><strong>Cliente:</strong></label>
+                            <div class="col-md-10">
+                                {{form_locacao.cliente}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for=""><strong>Cheque-in</strong> </label>
+                        {{form_locacao.data_locacao}}
+                    </div>
+                    <div class="col-md-3">
+                        <label for=""><strong>Hora Cheque-in</strong> </label>
+                        {{form_locacao.hora_locacao}}
+                    </div>
+                    <div class="col-md-3">
+                        <label for=""><strong>Data Cheque-out</strong> </label>
+                        {{form_locacao.data_devolucao}}
+                    </div>
+                    <div class="col-md-3">
+                        <label for=""><strong>Hora Cheque-out</strong> </label>
+                        {{form_locacao.hora_devolucao}}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for=""><strong>Km Saida</strong> </label>
+                        <input type="text" name='km_saida' value="{{locacao.km_saida}}" class="form-control" disabled>
+                    </div>
+                    <div class="col-md-3">
+                        <label for=""><strong>Km chegada</strong> </label>
+                        {{form_locacao.km_chegada}}
+                    </div>
+                    <div class="col-md-3">
+                        <label for=""><strong>Valor Diária</strong> </label>
+                        <input type="text" name='diaria' value="{{locacao.valor_diaria|floatformat:2}}" class="form-control" disabled>
+                    </div>
+                    <div class="col-md-3">
+                        <label for=""><strong>Desconto</strong> </label>
+                        {{form_locacao.valor_desconto}}
+                    </div>
+                </div>
+
+                <hr>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for=""><strong>Forma de Pagamento</strong> </label>
+                        {{form_locacao.forma_pagamento}}
+                    </div>
+                    
+                    
+                    <div class="col-md-3">
+                        <label for=""><strong>Status</strong> </label>
+                        {{form_locacao.status}}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="">Arquivo</label>
+                        {{form_locacao.arquivo}}
+                    </div>
+                </div>
+
+                <hr>
+            
+                <button class="auth_form_btn transition gradient gradient-blue gradient-hover">{{botao}}</button>
+
+        </form>
+
+
+{% endblock %}

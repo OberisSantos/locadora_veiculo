@@ -1,0 +1,95 @@
+{% extends 'locadora/base.html' %}
+
+{% block title_pagina %}
+    <div class="row">
+        <h3>Detalhar proprietário</h3>
+    </div>
+    
+{% endblock %}
+
+{% block content %}
+    <div class="row-container" style="font-size: small;">
+        
+        <table class="table table-responsive-lg">
+            <caption style="caption-side:top">Dados pessoais</caption>
+            <tr>
+                <th>Nome</th>  
+                <th>CPF</th>
+                <th>Data Nasc.</th>
+                <th>Sexo</th>
+                <th>Estado Civil</th>
+                <th>Celular</th>
+                <th>E-mail</th>
+                <th>Pessoa</th>
+                <th>Criado em</th>
+                <th>Ultima mod.</th>
+            </tr>
+
+            <tr>
+                <td>{{cliente.nome }}</td>
+                <td>{{cliente.cpf_cnpj }}</td>
+                <td>{{cliente.data_nascimento_abertura|date:'d/m/y' }}</td>
+                <td>{{cliente.sexo }}</td>
+                <td>{{cliente.estado_civil }}</td>
+                <td>{{cliente.celular }}</td>
+                <td>{{cliente.email }}</td>
+                <td>{{cliente.tipo_pessoa }}</td>
+                <td>{{cliente.data_criacao|date:'d/m/y - H:i'}}</td>
+                <td>{{cliente.data_update|date:'d/m/y - H:i'}}</td>
+                
+            </tr>
+           
+        </table>
+        
+        <div class='descricao' style="font-size: 0.75em;"> 
+            <h5>Descrição</h5>
+            {{cliente.observacao}}
+        </div>
+        
+    </div>
+    <div class="row-container" style="font-size: small;">
+        <hr>
+        <a href="{% url 'editar_cliente' id=cliente.id %}" title='Editar'>
+            <button type="button" class="btn btn-secondary">Editar</button>
+        </a>
+
+        <a href="{% url 'deletar_cliente' cliente.id %}" title='Excluir'>
+            <button type="button" class="btn btn-danger">Excluir</button>
+        </a>
+    
+    </div>
+
+    <div class="row-container" style="font-size: small;">
+        <hr>
+        <table class="table table-responsive-lg">
+            <caption style="caption-side:top">Endereço</caption>
+            <tr>
+                <th>Rua</th>
+                <th>Bairro</th>
+                <th>Nº</th>
+                <th>Cep</th>
+                <th>Cidade</th>
+                <th>UF</th>
+            </tr>
+            {% for endereco in endereco %}
+                <tr>
+                    <td>{{endereco.rua}}</td>
+                    <td>{{endereco.bairro }}</td>
+                    <td>{{endereco.numero }}</td>
+                    <td>{{endereco.cep }}</td>
+                    <td>{{endereco.cidade }}</td>
+                    <td>{{endereco.uf }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    
+    <div class="row-container">
+               
+                <a href="" title='Editar'>
+                    <button type="button" class="btn btn-secondary">Editar</button>
+                </a>
+
+    </div>
+
+{% endblock %}

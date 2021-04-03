@@ -1,0 +1,119 @@
+{% extends 'locadora/base.html' %}
+
+{% block title_pagina %}
+    <div class="row">
+        <h3>Detalhar Veículo</h3>
+    </div>
+    
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <img  height="300" src="{{veiculo.imagem_perfil.url}}">
+        </div>
+        
+    </div>
+    <div class="row">
+        <div class="col">
+        
+            <table class="table">
+                <caption style="caption-side:top">Dados pessoais</caption>
+                <tr>                
+                    <th>Placa</th>  
+                    <th>Renavam</th>
+                    <th>Chassi</th>
+                    <th>Cor.</th>
+                    <th>Ano</th>
+                    <th>Nº portas</th>
+
+                </tr>
+
+                <tr>
+                    <td>{{veiculo.placa }}</td>
+                    <td>{{veiculo.renavam }}</td>
+                    <td>{{veiculo.chassi }}</td>
+                    <td>{{veiculo.cor }}</td>
+                    <td>{{veiculo.ano }}</td>
+                    <td>{{veiculo.n_portas }}</td>
+
+                </tr>
+            </table>
+        </div>
+    </div>        
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <tr>
+                    <th>T. Combustivel</th>
+                    <th>Câmbio </th>
+                    <th>KM</th>
+                    <th>Nível tanque</th>
+                    <th>Modelo</th>
+                    <th>Marca</th>
+
+                </tr>
+                <tr>
+                    <td>{{veiculo.tipo_combustivel }}</td>
+                    <td>{{veiculo.cambio }}</td>
+                    <td>{{veiculo.quilometragem}}</td>
+                    <td>{{veiculo.nivel_tanque}}</td>
+                    <td>{{veiculo.modelo}}</td>
+                    <td>{{veiculo.marca}}</td>
+                    
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <tr>
+                    <th>Valor Diária</th>
+                    <th>Proprietário</th>
+                    <th>Status</th>
+                    <th>Data Cadastro</th>
+                    <th>Última modificação</th>
+                </tr>
+                <tr>
+                    <td>{{veiculo.valor_locacao}}</td>
+                    <td>{{veiculo.status}}</td>
+                    <td>{{veiculo.data_criacao|date:'d/m/Y - H:i'}}</td>
+                    <td>{{veiculo.data_update|date:'d/m/Y - H:i'}}</td>
+                </tr>
+            
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <span style="font-size: 0.75em;"> 
+                <h5>Descrição</h5>
+                {{veiculo.observacao}}
+            </span>
+        </div>
+        
+    </div>
+       
+    <div class="row">
+        <div class="col">
+            <table>
+                <tr>
+                    <td><a href="{% url 'editar_veiculo' id=veiculo.id %}"><button type="button" class="btn btn-secondary">Editar</button></a></td>
+                    <td><a href="{% url 'deletar_veiculo' id=veiculo.id %}"><button type="button" class="btn btn-danger">Excluir</button></a></td>
+                    <td>
+                        {% if veiculo.status.id == 1 %}
+                            <a href="{% url 'cadastrar_locacao' id=veiculo.id %}"><button type="button" class="btn btn-warning">Locar</button></a>
+                        {% else %}
+                            <a href=""><button type="button" class="btn btn-warning" disabled>Locar</button></a>
+                    
+                        {% endif %}
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

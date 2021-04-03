@@ -1,0 +1,51 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}
+
+<article class="auth">
+    <div class="auth_content container content">
+        <header class="auth_header">            
+            <h1>{{titulo}}</h1>
+        </header>
+
+        <form class="auth_form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+           
+            <label>
+                <div><span class="icon-user">Nome:</span></div>
+                {{form_prop.nome}}
+                
+            </label>
+           
+            <label>
+                <div><span class="icon-user-plus">CPF:</span></div>
+                {{form_prop.cnpj}}
+            </label>
+
+            <label>
+                <div><span class="icon-user-plus">Data Abertura:</span></div>
+                {{form_prop.data_abertura}}
+            </label>
+          
+            <label>
+                <div><span class="icon-user">Celular:</span></div>
+                {{form_prop.celular}}
+            </label>
+
+            <label>
+                <div><span class="icon-user">Email:</span></div>
+                {{form_prop.email}}
+            </label>
+            
+            <label>
+                <div><span class="icon-user">Observação:</span></div>
+                {{form_prop.observacao}}
+            </label>
+
+            <button class="auth_form_btn transition gradient gradient-blue gradient-hover">Enviar</button>
+        </form>
+    </div>
+</article>
+
+{% endblock %}
+

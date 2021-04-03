@@ -1,0 +1,55 @@
+{% extends 'locadora/base.html' %}
+
+{% block title_pagina %}
+    Lista de reservas
+{% endblock %}
+
+{% block content %}
+    <h5>Lista de Reservas</h5>
+    
+    {% if reserva|length > 0 %}
+        <div class="table-responsive-lg">
+            <table class="table table-sm" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <td scope="col">ID</td>
+                        <td scope="col">Placa</td>
+                        <td scope="col">Cliente</td>
+                        <td scope="col">Check-in</td>
+                        <td scope="col">Check-out</td>
+                        <td scope="col">Solicitação</td>
+                        <td scope="col">Diária</td>
+                        <td scope="col">Total</td>
+                        <td scope="col">Status</td>
+                        
+                    </tr>
+                </thead>
+                <tbody style="font-size:0.85rem;">
+                    {% for reserva in reserva %}
+                        <tr >
+                            <th scope="row"><a href="">{{reserva.veiculo.id}}</a> </th>
+                            <td>{{reserva.veiculo.placa|upper}}</td>
+                            <td>{{reserva.cliente.nome}}</td>
+                            
+                            <td>{{reserva.data_inicio}}</td>
+                            <td>{{reserva.data_devolucao}}</td>
+                            <td>{{reserva.data_criacao}}</td>
+
+                            <td>{{reserva.valor_diaria}}</td>
+                            <td>{{reserva.valor_total}}</td>
+
+                            <td><a href="{% url 'editar_reserva' id=reserva.id %}"><button type="button" class="btn btn-warning">{{reserva.status}}</button></a></td>
+                          <td><a href=""><button type="button" class="btn btn-danger">Excluir</button></a></td>
+                        </tr>
+                    {% endfor %}    
+                
+                </tbody>
+            </table>
+        </div>
+        
+    {% else %}
+        Sem dados
+    {%endif%}
+
+    
+{% endblock %}

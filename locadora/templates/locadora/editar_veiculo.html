@@ -1,0 +1,104 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}
+
+    <article class="auth">
+        <div class="auth_content container content">
+            <header class="auth_header">            
+                <h1>{{titulo}}</h1>
+            </header>
+
+            <form class="auth_form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label>
+                    <div><span class="icon-user">Placa:</span></div>
+                    {{form_veiculo.placa}}
+                    {{form_veiculo.placa.errors}}
+                </label>
+            
+                <label>
+                    <div><span class="icon-user-plus">Renavan:</span></div>
+                    {{form_veiculo.renavam}}
+                    {{form_veiculo.renavam.errors}}
+                </label>
+
+                <label>
+                    <div><span class="icon-user-plus">Chassi:</span></div>
+                    {{form_veiculo.chassi}}
+                    {{form_veiculo.chassi.errors}}
+                </label>
+
+                <label>
+                    <div><span class="icon-user-plus">Cor:</span></div>
+                    {{form_veiculo.cor}}
+                </label>
+
+                <label>
+                    <div><span class="icon-user-plus">Ano:</span></div>
+                    {{form_veiculo.ano}}
+                </label>
+
+                <label>
+                    <div><span class="icon-user-plus">Nº portas:</span></div>
+                    {{form_veiculo.n_portas}}
+                </label>
+
+                <label>
+                    <div><span class="icon-envelope">Modelo:</span></div>
+                    {{form_veiculo.modelo}}
+                </label>
+
+                <label>
+                    <div><span class="icon-envelope">Marca:</span></div>
+                    {{form_veiculo.marca}}
+                </label>
+
+
+                <label>
+                    <div><span class="icon-user">Tipo combustível:</span></div>
+                    {{form_veiculo.tipo_combustivel}}
+                </label>
+
+                <label>
+                    <div><span class="icon-envelope">Nivel combustível:</span></div>
+                    {{form_veiculo.nivel_tanque}}
+                    {{form_veiculo.nivel_tanque.errors}}
+                </label>
+
+                <label>
+                    <div><span class="icon-envelope">Câmbio:</span></div>
+                    {{form_veiculo.cambio}}
+                </label>
+
+                <label>
+                    <div><span class="icon-envelope">Quilometragem:</span></div>
+                    {{form_veiculo.quilometragem}}
+                </label>
+
+                <label>
+                    <div><span class="icon-envelope">Valor da locação:</span></div>
+                    {{form_veiculo.valor_locacao}}
+                </label>
+
+                <label>
+                    <div><span class="icon-envelope">imagem:</span></div>
+                    {{form_veiculo.imagem_perfil}}
+                </label>
+
+                <label>
+                    <div><span class="icon-envelope">Status:</span></div>
+                    {{form_veiculo.status}}
+                </label>
+
+                <label>
+                    <div><span class="icon-user-plus">Descrição:</span></div>
+                    {{form_veiculo.observacao}}
+                </label>
+                
+                <button class="auth_form_btn transition gradient gradient-blue gradient-hover">{{botao}}</button>
+            </form>
+        </div>
+    </article>
+
+{% endblock %}
+

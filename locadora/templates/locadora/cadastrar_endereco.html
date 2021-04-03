@@ -1,0 +1,47 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}
+    <article class="auth">
+        <div class="auth_content container content">
+            <header class="auth_header">            
+                <h1>{{titulo}}</h1>
+            </header>
+
+            <form class="auth_form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!--Dados do Endereço-->
+                <label>
+                    <div><span class="icon-user">Rua:</span></div>
+                    {{form.rua}}
+                </label>
+
+                <label>
+                    <div><span class="icon-user">Bairo:</span></div>
+                    {{form.bairro}}
+                </label>
+
+                <label>
+                    <div><span class="icon-user">Numero:</span></div>
+                    {{form.numero}}
+                </label>
+
+                <label>
+                    <div><span class="icon-user">CEP:</span></div>
+                    {{form.cep}}
+                </label>
+
+                <label>
+                    <div><span class="icon-user">Cidade:</span></div>
+                    {{form.cidade}}
+                </label>
+
+                <label>
+                    <div><span class="icon-user">UF:</span></div>
+                    {{form.uf}}
+                </label>
+                
+                <button class="auth_form_btn transition gradient gradient-blue gradient-hover">{{botao}}</button>
+            </form>
+        </div>
+    </article>
+{%endblock%}

@@ -1,0 +1,125 @@
+{% extends 'locadora/base.html' %}
+
+{% block title_pagina %}
+    <div class="row">
+        <h3>Detalhar proprietário</h3>
+    </div>
+    
+{% endblock %}
+
+{% block content %}
+    <div class="row" style="font-size: small;">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-responsive-lg">
+                        <caption style="caption-side:top">Dados pessoais</caption>
+                        <tr>
+                            <th>Nome</th>  
+                            <th>Cpf/CNPJ</th>
+                            <th>Data Nasc.</th>
+                            <th>Sexo</th>
+                            <th>Estado Civil</th>
+                            <th>Celular</th>
+                            <th>E-mail</th>
+                            <th>Criado em</th>
+                            <th>Ultima mod.</th>
+                        </tr>
+
+                        <tr>
+                            <td>{{proprietario.nome }}</td>
+                            <td>{{proprietario.cpf_cnpj }}</td>
+                            <td>{{proprietario.data_nascimento_abertura }}</td>
+                            <td>{{proprietario.sexo }}</td>
+                            <td>{{proprietario.estado_civil }}</td>
+                            <td>{{proprietario.celular }}</td>
+                            <td>{{proprietario.email }}</td>
+                            <td>{{proprietario.data_criacao|date:'d/m/Y - H:i'}}</td>
+                            <td>{{proprietario.data_update|date:'d/m/Y - H:i'}}</td>
+                            
+                        </tr>
+                    
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <hr>
+                    {%if proprietario.observacao %}
+                        <div class='row' style="font-size: 0.75em;"> 
+                            <div class="col">
+                                <h5>Descrição</h5>
+                                {{proprietario.observacao}}
+                            </div>
+                        </div>
+                    {%endif%} 
+                </div>
+            </div>
+
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <a href="{% url 'cadastrar_veiculo' id=proprietario.id %}">
+                        <button type="button" class="btn btn-warning">Novo veículo</button>
+                    </a>
+                
+                    <a href="{% url 'editar_proprietario' id=proprietario.id %}" title='Editar'>
+                        <button type="button" class="btn btn-secondary">Editar</button>
+                    </a>
+    
+                    <a href="{% url 'deletar_proprietario' proprietario.id %}" title='Excluir'>
+                        <button type="button" class="btn btn-danger">Excluir</button>
+                    </a>
+                </div>
+                
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <table class="table table-responsive-lg">
+                        <caption style="caption-side:top">Endereço</caption>
+                        <tr>
+                            <th>Rua</th>
+                            <th>Bairro</th>
+                            <th>Nº</th>
+                            <th>Cep</th>
+                            <th>Cidade</th>
+                            <th>UF</th>
+                            <th>Ação</th>
+                        </tr>
+                        {%for endereco in endereco %}
+                        <tr>
+                            <td>{{endereco.rua}}</td>
+                            <td>{{endereco.bairro }}</td>
+                            <td>{{endereco.numero }}</td>
+                            <td>{{endereco.cep }}</td>
+                            <td>{{endereco.cidade }}</td>
+                            <td>{{endereco.uf }}</td>
+                            <td>
+                                <a href="{% url 'editar_endereco' id=endereco.id %}" title='Editar'>
+                                    <button type="button" class="btn btn-secondary">Editar</button>
+                                </a>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        
+        {% if veiculo|length > 0 %}            
+            <div class="col-1 shadow-sm p-2 m-2  bg-light rounded">
+                <label>Veículos</label>
+                {%for veiculo in veiculo %}
+                    
+                    <span><a href="{% url 'detalhar_veiculo' id=veiculo.id %}">{{veiculo.placa}}</a></span>           
+                {%endfor%}
+            </div>
+        {%endif%}
+        
+
+    </div>
+ 
+
+{% endblock %}

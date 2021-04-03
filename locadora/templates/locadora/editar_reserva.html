@@ -1,0 +1,46 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}   
+<div class="auth container">
+    <header class="auth_header">            
+        <h1>Editar Reserva de Veículo</h1>
+    </header>
+
+    <form class="auth_form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+       
+                <label>
+                    <span>Data e hora da retirada do veículo: </span>
+                    <div class="row">
+                        <div class="col">
+                                {{form_reserva.data_inicio}}
+                           
+                        </div>    
+
+                    </div>  
+                </label>
+            
+                <label>
+                    <span>Data e hora da devolução do veículo: </span>
+                    <div class="row">
+                        <div class="col">
+                                {{form_reserva.data_devolucao}}
+                           
+                        </div>
+                    </div>  
+                </label>
+
+                <label>
+                    <span>Data e hora da devolução do veículo: </span>
+                    <div class="row">
+                        <div class="col">
+                                {{form_reserva.status}}
+                           
+                        </div>
+                    </div>  
+                </label>
+        <button class="auth_form_btn transition gradient gradient-blue gradient-hover">Editar</button>
+    </form>
+</div>
+
+{% endblock %}

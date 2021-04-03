@@ -1,0 +1,23 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}
+
+    <div class="text-center mt-5 mb-5 jumbotron">
+        <div class="alert alert-danger">
+            Tem certeza que deseja excluir {{mensagem}} <strong>{{objeto}}</strong>?
+        </div>
+
+        <form  method="POST" enctype="multipart/form-data" >
+
+            {%csrf_token%}
+    
+            <button type="submit" class="btn btn-danger">Excluir</button>
+            <a href="{% url 'index' %}"><button type="button" class="btn btn-secondary">Cancelar</button></a>
+            
+        </form>
+        
+        
+    </div>
+
+
+    {% endblock %}

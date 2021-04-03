@@ -1,0 +1,147 @@
+{% load static %} <!-- esse comando serve para ler a pasta static-->
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="mit" content="2019-09-04T04:02:42-03:00+28440">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    
+     <!-- Bootstrap Icones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+
+
+    <title>{% block title %} Locadora G4 {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/boot.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+
+    
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    -->
+  
+    <!--Icones-->
+    <style>
+       
+        .container{
+            min-height: 50ch;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+</head>
+
+<body>
+    
+
+    <!--HEADER-->
+    <header class="gradient gradient-yellow">
+        <nav class="navbar navbar-expand-lg navbar-light">
+           <a class="navbar-brand" href="{% url 'home' %}">LOCADORA<b>G4</b></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fa fa-home"></i>
+                            
+                          <span class="sr-only">(current)</span>
+                      </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Locação</a>
+
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="">Listar locação ativas</a>
+                                <a class="dropdown-item" href="">Listar todas as locações </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href=""></a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Reserva</a>
+
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{% url 'listar_reserva' %}">Listar Reserva</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href=""></a>
+                            </div>
+                        </li>
+                    {% endif %}
+
+                </ul>
+                <!--Pesquisar-->
+                <div class="btn-space">
+                    <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'pesquisar_veiculo' %}">
+                        {% csrf_token %} 
+                        <input class="form-control mr-sm-2" name='pesquisar' type="text" placeholder="Buscar veículo">
+                        <button class="btn btn-secondary my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
+                    </form>
+                </div>
+                <div class="btn-space">
+                    {% if user.is_authenticated %}                                          
+                        <div class="dropdown " data-display="static">
+                            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                                Ola,  {{request.user.username}}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-sm-right" >
+                                <h5 class="dropdown-header">Perfíl do Cliente</h5>
+                                <a class="dropdown-item" href="#">Editar Perfíl</a>
+                                <a class="dropdown-item" href="#">Editar Endereço</a>
+                                <a class="dropdown-item" href="#"></a>
+                                <h5 class="dropdown-header">Perfíl do Usuário</h5>
+                                <a class="dropdown-item" href="">Alterar senha</a>
+                                <a class="dropdown-item" href="{% url 'logout_usuario' %}">
+                                    
+                                    <i style="font-size: 1rem;" class="bi bi-box-arrow-in-left">Sair</i>
+                                </a>
+                            </div>
+                        </div>
+                        </div>
+                      
+
+                    {%else%}
+                        <span> Ola, </span>
+                        <a href="{% url 'login_usuario' %}">
+                            <button class="btn btn-sm my-2 my-sm-0 icon-sign-in">
+                                <i style="font-size: 1rem;" class="bi bi-box-arrow-in-right"> Faça seu login </i>
+                            </button>
+                        </a>  
+                        <!-- aria-label="..." on the control -->
+                        
+                    {% endif %}
+                </div>
+                
+            </div>
+        </nav>
+
+    </header>
+
+
+<!--CONTENT-->
+    <main class="container ">
+            {% block content %}
+
+            {% endblock %}
+        
+    </main>
+
+
+<script src=" {% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/scripts.js' %}"></script>
+
+</body>
+</html>

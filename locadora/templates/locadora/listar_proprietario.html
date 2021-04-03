@@ -1,0 +1,65 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-8">
+            <h3>{{titulo}}</h3>
+        </div>
+        <div class="col-4">
+            <div class="text-right">
+                <a href="{% url 'cadastrar_proprietario_fisico' %}" class="btn btn-primary">
+                  Cadastrar Proprietario
+                </a>
+            </div>
+        </div>
+
+    </div>
+        
+
+    {% if proprietario|length > 0 %}
+ 
+        <table class="table table-responsive-lg">
+            <thead>
+                <tr style="text-align: center;">
+                    <th>Nome</th>
+                    <th>CPF/CNPJ</th>
+                    <th>Celular</th>
+                    <th>E-mail</th>
+                    <th colspan="3">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proprietario in proprietario %}
+                <tr>
+                    <td><a href="{% url 'detalhar_proprietario' id=proprietario.id %}">{{proprietario.nome}}</a></td><!--o link deve levar para detalhes-->
+                    <td>{{proprietario.cpf_cnpj}}</td>
+                    <!--<td>{{proprietario.data_nascimento|date:"d/m/Y" }}</td>-->
+                    
+                    <td>{{proprietario.celular}}</td>
+                    <td>{{proprietario.email}}</td>
+                    
+                    <td>
+                        <a href="{% url 'cadastrar_veiculo' id=proprietario.id %}">
+                            <button type="button" class="btn btn-warning">Novo veículo</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'deletar_proprietario' proprietario.id %}" title='Excluir'>
+                            <button type="button" class="btn btn-danger">Excluir</button>
+                        </a>
+                    </td>
+
+                </tr>
+                    
+                {% endfor %}
+            </tbody>
+        </table>
+    
+    {% else %}
+        <div class="text-center mt-5 mb-5 jumbotron">
+            <h5>Nenhum <code>Proprietario</code> cadastrado ainda.</h5>
+        </div>
+
+    {% endif %}
+
+{% endblock %}

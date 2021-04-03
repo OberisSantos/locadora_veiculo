@@ -1,0 +1,58 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}
+<article class="auth">
+    <div class="auth_content container content">
+
+            <header class="auth_header">            
+                <h1>{{titulo}}</h1>
+            </header>
+
+            <form class="auth_form shadow-sm p-3 mb-5 bg-light rounded" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Usuário: </label>
+                                {{form_usuario.username}}
+                                {{form_usuario.username.errors}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                {{form_usuario.password1.errors}}
+                                <label>Senha: </label>
+                                {{form_usuario.password1}}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                {{form_usuario.password2.errors}}
+                                <label>Confirmação de senha: </label>
+                                {{form_usuario.password2}}
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <input type="submit" value="Cadastrar" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+        
+    </div>
+</article>
+
+
+    
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'usuario/base_usuario.html' %}
+
+{% block content %}   
+<div class="auth container content shadow p-3 m-1 rounded">
+    <header class="auth_header">            
+        <h1>Reservar Veículo</h1>
+    </header>
+
+    <form class="auth_form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+       
+                <label>
+                    <h5>{{cliente.nome|upper}}</h5>
+                </label>
+          
+                <label>
+                    <div class="row">
+                        <div class="col-8">
+                           <h6> {{veiculo.marca|upper}} - {{veiculo.modelo|upper}} / {{veiculo.ano}}</h6>
+                        </div>
+                        <div class="col-4">
+                            <h5><span class="badge badge-success"> R$ {{veiculo.valor_locacao}}/dia </span></h5>
+                            
+                        </div>
+                    </div>
+                    
+                </label>
+                <label>
+                    <span>Data e hora da retirada do veículo: </span>
+                    <div class="row">
+                        <div class="col">
+                                {{form_reserva.data_inicio}}
+                           
+                        </div>                        
+                    </div>  
+                </label>
+            
+                <label>
+                    <span>Data e hora da devolução do veículo: </span>
+                    <div class="row">
+                        <div class="col-8">
+                                {{form_reserva.data_devolucao}}
+                           
+                        </div>
+                    </div>  
+                </label>
+
+
+                
+                
+             
+       
+      
+
+        <button class="auth_form_btn transition gradient gradient-blue gradient-hover">Reservar</button>
+    </form>
+</div>
+
+{% endblock %}

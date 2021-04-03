@@ -1,0 +1,54 @@
+{% extends 'usuario/base_usuario.html' %}
+
+{% block content %}
+    <div class="shadow p-3 m-1 rounded">
+        <h5>Lista de reservas</h5>
+        {% if esiste == True %}
+        
+            <div class="table-responsive-md">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Código</th>
+                            <th scope="col">Modelo</th>
+                            <th scope="col">Retirada</th>
+                            <th scope="col">Devolução</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Status</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reserva in reserva %}
+                    
+                            <tr>
+                                <th scope="row"><a href="{% url 'detalhar_reserva' id=reserva.id %}">cod-0{{reserva.id}} </a></th>
+                                <td>{{reserva.veiculo.modelo|upper}}</td>
+                                <td>{{reserva.data_inicio|date:'d/m/Y - H:i'}}</td>
+                                <td>{{reserva.data_devolucao|date:'d/m/Y -H:i'}}</td>
+                                
+                                <td>R$ {{reserva.valor_total|floatformat:2}}</td>
+                                <td title="{{reserva.status}}">
+                                    {% if reserva.status.id == 1 %} 
+                                        <span class="badge badge-warning"> 
+                                        <i style="font-size: 1.2rem;" class="bi bi-hourglass-split"></i></td>
+                                        </span>
+                                    {% elif reserva.status.id == 2 %}
+                                        <span class="badge badge-success"> 
+                                            <i style="font-size: 1.2rem;" class="bi bi-check2"></i></td>
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center mt-5 mb-5 jumbotron ">
+                <h5>Nenhuma <code>Reserva</code> cadastrada ainda.</h5>
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}

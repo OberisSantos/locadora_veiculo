@@ -1,0 +1,72 @@
+{% extends 'usuario/base_usuario.html' %}
+
+{% block content %}
+
+<article class="auth">
+    <div class="auth_content container content">
+        <header class="auth_header">            
+            <h1>Formulário de Cadastro de Cliente</h1>
+        </header>
+
+        <form class="auth_form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+           
+            <label>
+                <div><span class="icon-user">Nome:</span></div>
+                {{form_cliente.nome}}
+                {{form_cliente.nome.errors}}
+                
+            </label>
+           
+            <label>
+                <div><span class="icon-user-plus">CPF/CNPJ:</span></div>
+                {{form_cliente.cpf_cnpj}}
+                {{form_cliente.cpf_cnpj.errors}}
+            </label>
+
+            <label>
+                <div><span class="icon-user-plus">Data Nascimento:</span></div>
+                {{form_cliente.data_nascimento_abertura}}
+                {{form_cliente.data_nascimento_abertura.errors}}
+            </label>
+
+            <label>
+                <div><span class="icon-user-plus">Sexo:</span></div>
+                {{form_cliente.sexo}}
+                {{form_cliente.sexo.errors}}
+            </label>
+
+            <label>
+                <div><span class="icon-user-plus">Estado Civil:</span></div>
+                {{form_cliente.estado_civil}}
+                {{form_cliente.estado_civil.errors}}
+            </label>
+
+            <label>
+                <div><span class="icon-user">Celular:</span></div>
+                {{form_cliente.celular}}
+                {{form_cliente.celular.errors}}
+            </label>
+
+            <label>
+                <div><span class="icon-user">E-mail:</span></div>
+                {{form_cliente.email}}
+                {{form_cliente.email.errors}}
+                
+            </label>
+
+            <label>
+                <div><span class="icon-user">Observação:</span></div>
+                {{form_cliente.observacao}}
+                {{form_cliente.observacao.errors}}
+
+            </label>
+
+
+            <button class="auth_form_btn transition gradient gradient-blue gradient-hover">Próximo</button>
+        </form>
+    </div>
+</article>
+
+{% endblock %}
+

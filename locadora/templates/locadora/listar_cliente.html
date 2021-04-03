@@ -1,0 +1,62 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-8">
+            <h3>Lista de Cliente</h3>
+        </div>
+        <div class="col-4">
+            <div class="text-right">
+                <a href="{% url 'cadastrar_cliente' %}" class="btn btn-primary">
+                  Cadastrar Cliente
+                </a>
+            </div>
+        </div>
+
+    </div>
+        
+
+    {% if cliente|length > 0 %}
+    
+        <table class="table table-responsive-lg">
+            <thead>
+                <tr style="text-align: center;">
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF/CNPJ</th>
+                    <th>Celular</th>
+                    <th>E-mail</th>
+                    <th colspan="2">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in cliente %}
+                <tr>
+                    <th>{{cliente.id}}</th>
+                    <th><a href="{% url 'detalhar_cliente' id=cliente.id %}">{{cliente.nome|upper}}</a></th><!--o link deve levar para detalhes-->
+                    <td>{{cliente.cpf_cnpj}}</td>
+                    <!--<td>{{proprietario.data_nascimento|date:"d/m/Y" }}</td>-->
+                    
+                    <td>{{cliente.celular}}</td>
+                    <td>{{cliente.email}}</td>
+
+                    <td>
+                        <a href="{% url 'deletar_cliente' id=cliente.id %}" title='Deletar'>
+                            <button type="button" class="btn btn-danger">Excluir</button>
+                        </a>
+                    </td>
+                    
+                </tr>
+                    
+                {% endfor %}
+            </tbody>
+        </table>
+    
+    {% else %}
+        <div class="text-center mt-5 mb-5 jumbotron">
+            <h5>Nenhum <code>Cliente</code> cadastrado ainda.</h5>
+        </div>
+
+    {% endif %}
+
+{% endblock %}

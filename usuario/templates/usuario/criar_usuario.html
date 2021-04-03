@@ -1,0 +1,38 @@
+{% extends 'usuario/base_usuario.html' %}
+
+
+{% block content %}
+    
+            <!--FORMULÁRIO DE CADASTRO-->
+   
+        <div class="d-flex justify-content-center h-50 mt-4">
+                <form method="post" accept="{% url 'criar_usuario' %}">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label>Usuário </label>
+                        {{form_usuario.username}}
+                        {{form_usuario.username.errors}}
+                    </div>
+            
+                    <div class="form-group">
+                        <label>Senha: </label>
+                        {{form_usuario.password1}}
+                        {{form_usuario.password1.errors}}
+                    </div>
+            
+                    <div class="form-group">
+                        <label>Confirmação de senha: </label>
+                        {{form_usuario.password2}}
+                        {{form_usuario.password2.errors}}
+                    </div>
+            
+                    <div class="form-group">
+                        <input type="submit" value="Cadastrar" class="btn btn-primary">
+                    </div>
+                </form>
+            
+        </div>
+    
+     
+{% endblock %}

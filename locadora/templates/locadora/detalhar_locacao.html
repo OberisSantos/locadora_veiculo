@@ -1,0 +1,97 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}
+        <h5>Detalhar Locação</h5>
+        <hr>
+        <div class="row">
+            <div class="col col-md-5">
+                <div class="form-group row">
+                    <label for="" class="col-md-auto col-form-label"><strong>Veículo / Placa:</strong></label>
+                    <div class="col-md-auto">
+                        <input class="form-control" type="text" value="{{locacao.veiculo.placa}}" name="veiculo" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-md-7">
+                <div class="form-group row">
+                    <label for="" class="col-md-2 col-form-label"><strong>Cliente:</strong></label>
+                    <div class="col-md-10">
+                        {{locacao.cliente.nome}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <label for=""><strong>Cheque in:</strong> </label>
+                {{locacao.data_locacao|date:"d/m/y"}}-{{locacao.hora_locacao|date:"H:i"}}
+            </div>
+            <div class="col-md-3">
+                <label for=""><strong>Cheque out:</strong> </label>
+                {{locacao.data_devolucao|date:"d/m/y"}}-{{locacao.hora_devolucao|date:"H:i"}}
+            </div>
+            <div class="col-md-3">
+                <label for=""><strong>Km saída:</strong> </label>
+                {{locacao.km_saida|floatformat:0}}
+            </div>
+            <div class="col-md-3">
+                <label for=""><strong>Km chegada:</strong> </label>
+                {{locacao.km_chegada|floatformat:0}}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <label for=""><strong>Diária:</strong> </label>
+                R$ {{locacao.valor_diaria|floatformat:2}}
+            </div>
+            <div class="col-md-3">
+                <label for=""><strong>Total:</strong> </label>
+                R$ {{locacao.valor_total|floatformat:2}}
+            </div>
+            <div class="col-md-6">
+                <label for=""><strong>Forma Pagamento:</strong> </label>
+                {{locacao.forma_pagamento}}
+            </div>
+            
+        </div>
+
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <label for=""><strong>Situação</strong> </label>
+                {{locacao.status}}
+            </div>
+            <div class="col-md-3">
+                <label for=""><strong>Criada:</strong> </label>
+                {{locacao.data_criacao|date:"d/m/y - H:i"}}
+            </div>
+            <div class="col-md-3">
+                <label for=""><strong>Update:</strong> </label>
+                {{locacao.data_update|date:"d/m/y - H:i"}}
+            </div>
+           
+            <div class="col-md-3">
+                <label for="">Arquivo</label>
+                {% if locacao.arquivo%}
+                
+                    <a href="{{locacao.arquivo.url}}" target='_blank'>Ver</a>
+                {% endif %}
+            </div>
+        </div>
+        <hr>
+        <div class="row">        
+            <div class="col">
+                <a href="{% url 'editar_locacao' id=locacao.id %}" title='status'>
+                    <button type="button" class="btn btn-secondary">Editar</button>
+                </a></td>
+                <a href="{% url 'deletar_locacao' id=locacao.id %}" title='Deletar'>
+                    <button type="button" class="btn btn-danger">Excluir</button>
+                </a>
+            </div>
+           
+        </div>
+
+
+{% endblock %}

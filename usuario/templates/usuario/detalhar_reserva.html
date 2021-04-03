@@ -1,0 +1,50 @@
+{% extends 'usuario/base_usuario.html' %}
+
+{% block content %}
+    
+    <div class="table-responsive-md shadow p-3 m-1 rounded">
+        <table class="table">
+            <h5>Detalhes da reserva</h5>
+            <thead>
+                <tr>
+                  <th scope="col">Código</th>
+                  <th scope="col">Marca</th>
+                  <th scope="col">Modelo</th>
+                  <th scope="col">Retirada</th>
+                  <th scope="col">Devolução</th>
+                  <th scope="col">Diária</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Solicitação</th>
+                  <th scope="col">Status</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                  <th scope="row">cod-0{{reserva.id}}</th>
+                  <td>{{reserva.veiculo.marca|upper}}</td>
+                  <td>{{reserva.veiculo.modelo|upper}}</td>
+                  <td>{{reserva.data_inicio|date:'d/m/Y - H:i'}}</td>
+                  <td>{{reserva.data_devolucao|date:'d/m/Y -H:i'}}</td>
+                  <td>R$ {{reserva.valor_diaria|floatformat:2}}</td>
+                  
+                  <td>R$ {{reserva.valor_total|floatformat:2}} </td>
+
+                  <td>{{reserva.data_criacao|date:'d/m/Y -H:i'}}</td>
+                  <td title="{{reserva.status}}">
+                    {% if reserva.status.id == 1 %} 
+                        <span class="badge badge-warning"> 
+                          <i style="font-size: 1.2rem;" class="bi bi-hourglass-split"></i></td>
+                        </span>
+                    {% elif reserva.status.id == 2 %}
+                        <span class="badge badge-success"> 
+                            <i style="font-size: 1.2rem;" class="bi bi-check2"></i></td>
+                        </span>
+                    {% endif %}
+                </tr>
+            </tbody>
+        
+        </table>
+    </div>
+
+{% endblock %} 

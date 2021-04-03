@@ -1,0 +1,57 @@
+{% extends 'locadora/base.html' %}
+
+{% block title_pagina %}
+    Lista de Veículos
+{% endblock %}
+
+{% block content %}
+    <h5>Lista de Veículos</h5>
+    
+    {% if veiculos|length > 0 %}
+        <div class="table-responsive-md">
+            <table class="table">
+                <thead>
+                    <tr style="text-align: center;">
+                        <th scope="col">Código</th>
+                        <th scope="col">Placa</th>
+                        <th scope="col">Modelo</th>
+                        <th scope="col">Diária</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Dono</th>
+                        <th scope="col" colspan='3'>Ação</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for veiculo in veiculos %}
+                        <tr>
+                            <th scope="row"><a href="{% url 'detalhar_veiculo' id=veiculo.id %}">cod-0{{veiculo.id}}</a> </th>
+                            <td>{{veiculo.placa|upper}}</td>
+                            <td>{{veiculo.modelo|upper}}</td>
+                            <td>{{veiculo.valor_locacao|floatformat:2}}</td>
+                            
+                            <td title="{{veiculo.status.descricao}}">{{veiculo.status}}</td>
+                            <td title="{{veiculo.status.descricao}}">{{veiculo.proprietario}}</td>
+                            <td>
+                                {% if veiculo.status.id == 1 %}
+                                    <a href="{% url 'cadastrar_locacao' id=veiculo.id %}"><button type="button" class="btn btn-warning">Locar</button></a>
+                                {% else %}
+                                    <a href="{% url 'cadastrar_locacao' id=veiculo.id %}"><button type="button" class="btn btn-warning" disabled>Locar</button></a>
+                               
+                                {% endif %}
+                            </td>
+                            <td><a href="{% url 'editar_veiculo' id=veiculo.id %}"><button type="button" class="btn btn-secondary">Editar</button></a></td>
+                            <td><a href="{% url 'deletar_veiculo' id=veiculo.id %}"><button type="button" class="btn btn-danger">Excluir</button></a></td>
+                        </tr>
+                    {% endfor %}    
+                
+                </tbody>
+            </table>
+        </div>
+        
+    {% else %}
+        Sem dados
+    {%endif%}
+
+    
+{% endblock %}

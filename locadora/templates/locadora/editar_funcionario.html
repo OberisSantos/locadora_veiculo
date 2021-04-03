@@ -1,0 +1,90 @@
+{% extends 'locadora/base.html' %}
+
+{% block content %}
+
+<article class="auth">
+    <div class="auth_content container content">
+        <header class="auth_header">            
+            <h1>{{titulo}}</h1>
+        </header>
+
+        <form class="auth_form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+           
+            <label>
+                <div><span class="icon-user">Usuário de login:</span></div>
+                {{form_funcionario.usuario}}
+                {{form_funcionario.usuario.errors}}
+                
+            </label>
+
+            <label>
+                <div><span class="icon-user">Nome:</span></div>
+                {{form_funcionario.nome}}
+                {{form_funcionario.nome.errors}}
+                
+            </label>
+           
+            <label>
+                <div><span class="icon-user-plus">CPF/CNPJ:</span></div>
+                {{form_funcionario.cpf}}
+                {{form_funcionario.cpf.errors}}
+            </label>
+
+            <label>
+                <div><span class="icon-user-plus">Data Nascimento:</span></div>
+                {{form_funcionario.data_nascimento}}
+                {{form_funcionario.data_nascimento_abertura.errors}}
+            </label>
+
+            <label>
+                <div><span class="icon-user-plus">Sexo:</span></div>
+                {{form_funcionario.sexo}}
+                {{form_funcionario.sexo.errors}}
+            </label>
+
+            <label>
+                <div><span class="icon-user-plus">Estado Civil:</span></div>
+                {{form_funcionario.estado_civil}}
+                {{form_funcionario.estado_civil.errors}}
+            </label>
+
+            <label>
+                <div><span class="icon-user">Celular:</span></div>
+                {{form_funcionario.celular}}
+                {{form_funcionario.celular.errors}}
+            </label>
+
+            <label>
+                <div><span class="icon-user">E-mail:</span></div>
+                {{form_funcionario.email}}
+                {{form_funcionario.email.errors}}
+                
+            </label>
+
+            <label>
+                <div><span class="icon-user">Salário:</span></div>
+                {{form_funcionario.salario}}
+                {{form_funcionario.salario.errors}}
+                
+            </label>
+
+            <label>
+                <div><span class="icon-user">Data Contratação:</span></div>
+                {{form_funcionario.data_contratacao}}
+                {{form_funcionario.salrio.errors}}
+                
+            </label>
+
+            <label>
+                <div><span class="icon-user">Observação:</span></div>
+                {{form_funcionario.observacao}}
+                {{form_funcionario.observacao.errors}}
+
+            </label>
+            <button class="auth_form_btn transition gradient gradient-blue gradient-hover">{{botao}}</button>
+        </form>
+    </div>
+</article>
+
+{% endblock %}

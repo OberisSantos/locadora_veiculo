@@ -1,0 +1,60 @@
+{% extends 'usuario/base_usuario.html' %}
+
+{% block content %}    
+            
+            {% for veiculo in veiculo %} 
+            
+                <div class="row row-lg-4 shadow p-3 m-1 rounded">
+                    <div class="col-lg-4">
+                        <a href=""><img class="mr-3" style="width: 20rem;" src="{{veiculo.imagem_perfil.url}}" alt="Imagem"></a>
+                      
+                    </div>
+                         
+                    <div class="col-lg-8">
+                        <div class="row row-col-1">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <h5 class="text-muted">{{veiculo.marca|upper}} - {{veiculo.modelo|upper}} 
+                                            <button type="button" class="btn btn-secondary">R$: {{veiculo.valor_locacao}}/dia</button>
+                                        </h5>     
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h6 class="text-muted">Detalhes</h6>
+                                    </td>
+                                </tr>
+                                <tr class="text-monospace">
+                                    
+                                    <td>
+                                        <span>O veículo possui cor: {{veiculo.cor|upper}}, </span>
+                                        <span>motor: {{veiculo.tipo_combustivel|upper}},</span> 
+                                           
+                                    </td>
+
+                                </tr>
+                                <tr class="text-monospace">
+                                    <td>
+                                        <span>e possui câmbio: {{veiculo.cambio|upper}},</span>
+                                        <span>Ano: {{veiculo.ano|upper}} </span>  
+                                    </td>
+                                    
+                                </tr>
+                            </table>
+                            
+                        </div>
+                        <div class="row row-col-1">
+                            <table>
+                                <tr>
+                                    <td><a href="{% url 'reservar_veiculo' id=veiculo.id %}"><button type="button" class="btn btn-warning">Reservar</button></a></td>
+                                </tr>
+                            </table>
+                        
+                        </div>
+                    </div>  
+                </div><br>
+
+            {% endfor %}
+
+{% endblock %}
