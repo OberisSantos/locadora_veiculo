@@ -83,7 +83,7 @@ def reservar_veiculo(request, id):
                 form_reserva = ReservaForm()
             return render(request, 'usuario/reserva_veiculo.html', {'form_reserva':form_reserva, 'veiculo': veiculo, 'cliente': cliente})
     else:
-        return redirect(usuario_cadastro, id=request.user.id)
+        return redirect(usuario_cadastro)
 
     return redirect(home)
 
@@ -114,26 +114,100 @@ def listar_reserva(request):
 
 #função para cadastrar dados pessoais do usuário
 @login_required(login_url='login_usuario')
-def usuario_cadastro(request, id):
+def usuario_cadastro(request):
     
-    if request.method == 'POST':
-        form_cliente = ClienteForm(request.POST, request.FILES)
-       
-        if form_cliente.is_valid():
-            cliente = form_cliente.save(commit=False)
-            cliente.usuario_id = request.user.id
-            cliente.tipo_pessoa = u'PF'
-            cliente.save()
-
-            return redirect (home)
-        
+    if Cliente.objects.filter(usuario_id=request.user.id).exists():
+        return redirect(usuario_editar)
     else:
-        form_cliente= ClienteForm()
 
-    return render(request, 'usuario/asuario_atualizar.html', {'form_cliente':form_cliente})
+        if request.method == 'POST':
+            form_cliente = ClienteForm(request.POST, request.FILES)
+        
+            if form_cliente.is_valid():
+                cliente = form_cliente.save(commit=False)
+                cliente.usuario_id = request.user.id
+                cliente.tipo_pessoa = u'PF'
+                cliente.save()
+
+                return redirect (home)
+            
+        else:
+            form_cliente= ClienteForm()
+
+        return render(request, 'usuario/asuario_atualizar.html', {'form_cliente':form_cliente})
 
 
+def usuario_editar(request):
 
+    if Cliente.objects.filter(usuario_id = request.user.id).exists():
+        cliente = get_object_or_404(Cliente, usuario_id=request.user.id)
+
+        if request.method == 'POST':
+            form_cliente = ClienteForm(request.POST,  request.FILES, instance=cliente)
+
+            if form_cliente.is_valid():
+                cliente = form_cliente.save(commit=False)            
+                cliente.save()
+                return redirect(home)
+        else:
+            form_cliente= ClienteForm(instance=cliente)
+
+        return render(request, 'usuario/asuario_atualizar.html', {'form_cliente':form_cliente})
+    else:
+        return redirect(usuario_cadastro)
+
+#endereco
+def endereco_cadastro(request):
+    if get_object_or_404(Cliente,usuario_id=request.user.id):
+        cliente = Cliente.objects.get(usuario_id=request.user.id)
+
+        if Endereco.objects.filter(pessoa_id=cliente.id).exists():
+            return redirect(endereco_editar)
+        else:
+            if request.method == 'POST':
+                form_endereco = EnderecoForm(request.POST, request.FILES)
+                
+                if form_endereco.is_valid():
+                    endereco = form_endereco.save(commit=False)
+                    endereco.pessoa_id= cliente.id
+                    endereco.save()
+
+                    return redirect(home)
+            else:
+                form_endereco = EnderecoForm()
+                objeto = {
+                    'form':form_endereco,
+                    'titulo': 'Cadastrar Endereço',
+                    'botao': 'Cadastrar',
+                }
+            return render(request, 'usuario/endereco_editar.html', objeto)
+
+    return redirect(home)       
+
+def endereco_editar(request):
+    cliente = Cliente.objects.get(usuario_id=request.user.id)
+    if cliente:
+
+        if Endereco.objects.filter(pessoa_id=cliente.id).exists():
+            endereco = get_object_or_404(Endereco, pessoa_id=cliente.id)
+
+            if request.method == 'POST':
+                form_endereco = EnderecoForm(request.POST,  request.FILES, instance=endereco)
+                if form_endereco.is_valid():
+                    endereco = form_endereco.save(commit=False)
+                    endereco.save()
+                    return redirect(home)
+            else:
+                form_endereco = EnderecoForm(instance=endereco)
+                objeto = {
+                    'form':form_endereco,
+                    'titulo': 'Editar Endereço',
+                    'botao': 'Editar',
+                }
+            return render(request, 'usuario/endereco_editar.html', objeto)
+
+        return redirect(endereco_cadastro)
+    return redirect(home)
 
 #função para criar usuario e senha
 def criar_usuario(request):

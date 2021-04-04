@@ -7,16 +7,25 @@
             Tem certeza que deseja excluir {{mensagem}} <strong>{{objeto}}</strong>?
         </div>
 
-        <form  method="POST" enctype="multipart/form-data" >
+        <div class="row">
+            <div class="col">
+                <form  method="POST" enctype="multipart/form-data" >
 
-            {%csrf_token%}
-    
-            <button type="submit" class="btn btn-danger">Excluir</button>
-            <a href="{% url 'index' %}"><button type="button" class="btn btn-secondary">Cancelar</button></a>
+                    {%csrf_token%}
             
-        </form>
-        
-        
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                    <a href="{% url 'index' %}"><button type="button" class="btn btn-secondary">Cancelar</button></a>
+                    
+                </form>
+            </div>
+        </div>
+        {% if restricao %} 
+            <div class="row mt-3">
+                <div class="col alert alert-danger">
+                    {{aviso}}
+                </div>
+            </div>
+        {% endif %}
     </div>
 
 

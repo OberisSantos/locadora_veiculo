@@ -1,6 +1,16 @@
 {% extends 'locadora/base.html' %}
 
 {% block content %}
+    {% if error %}
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-danger">
+                    <strong>{{error}}</strong>?
+                </div>
+            </div>
+        </div>
+    {%endif%}
+
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 

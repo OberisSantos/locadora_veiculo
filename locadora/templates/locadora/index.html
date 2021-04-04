@@ -2,72 +2,83 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-            <a class="nav-link active" href="{% url 'index' %}">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"  href="{% url 'listar_reservas' %}">Reservas</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">Menu 2</a>
-            </li>
-        </ul>
-
         <div class="row">
-            <div class="col-8 ">
-                <div id="index" class="container tab-pane active shadow-sm p-2 m-2  bg-light rounded">
+            <div class="col">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="{% url 'listar_reservas' %}">Reservas</a>
+                    </li>
+                   
+                </ul>
+        
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-8">
+                <div id="index" class="tab-pane active shadow-sm p-2 m-2  bg-light rounded">
                     <h5>Locação em Andamento</h5>
-                    <table class="table-striped" style="font-size: 0.85rem;" >
-                        <thead>
-                            <tr>
-                                <td scope="col">ID</td>
-                                <td scope="col">Placa</td>
-                                <td scope="col">Cliente</td>
-                                <td scope="col">Check-in</td>
-                                <td scope="col">Check-out</td>
-                                <td scope="col">Valor</td>
-                                <td scope="col">Status</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for locacao in locacao %}
-                            <tr>
-                                <td><a href="{% url 'detalhar_locacao' id=locacao.id %}">{{locacao.id}}</a></td><!--o link deve levar para detalhes-->
-                                <td>{{locacao.veiculo.placa|upper}}</td>
-                                <td>{{locacao.cliente.cpf_cnpj}}</td>
-                                <td>
-                                    {{locacao.data_locacao|date:"d/m/y"}}-
-                                    {{locacao.hora_locacao|date:"h:i"}}
-                                </td>
-                                <td>
-                                    {{locacao.data_devolucao|date:"d/m/y"}}-
-                                    {{locacao.hora_devolucao|date:"h:i"}}
-                                </td>
-                                <td>R$ {{locacao.valor_total|floatformat:2}}</td>
-                                <td>
-                                    {% if locacao.status %}
-                                        <span class="badge badge-success"> 
-                                            <i class="bi bi-check2">{{locacao.status}}</i></td>
-                                        </span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <a href="" title='status'>
-                                        <button type="button" class="btn btn-secondary">Editar</button>
-                                    </a>
-                                </td>
-                            </tr>
+                    {% if locacao|length > 0 %}
+                        <table class="table-striped" style="font-size: 0.85rem;" >
+                            <thead>
+                                <tr>
+                                    <td scope="col">ID</td>
+                                    <td scope="col">Placa</td>
+                                    <td scope="col">Cliente</td>
+                                    <td scope="col">Check-in</td>
+                                    <td scope="col">Check-out</td>
+                                    <td scope="col">Valor</td>
+                                    <td scope="col">Status</td>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 
-                            {% endfor %}
-                        </tbody>
-                    </table>
+
+                                {% for locacao in locacao %}
+                                <tr>
+                                    <td><a href="{% url 'detalhar_locacao' id=locacao.id %}">{{locacao.id}}</a></td><!--o link deve levar para detalhes-->
+                                    <td>{{locacao.veiculo.placa|upper}}</td>
+                                    <td>{{locacao.cliente.cpf_cnpj}}</td>
+                                    <td>
+                                        {{locacao.data_locacao|date:"d/m/y"}}-
+                                        {{locacao.hora_locacao|date:"h:i"}}
+                                    </td>
+                                    <td>
+                                        {{locacao.data_devolucao|date:"d/m/y"}}-
+                                        {{locacao.hora_devolucao|date:"h:i"}}
+                                    </td>
+                                    <td>R$ {{locacao.valor_total|floatformat:2}}</td>
+                                    <td>
+                                        {% if locacao.status %}
+                                            <span class="badge badge-success"> 
+                                                <i class="bi bi-check2">{{locacao.status}}</i></td>
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'editar_locacao' id=locacao.id %}" title='status'>
+                                            <button type="button" class="btn btn-secondary">Editar</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                    
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                                <div class="text-center mt-5 mb-5 jumbotron">
+                                    <h5>Nenhuma locação em <code>andamento</code> ainda.</h5>
+                                </div>
+                    {% endif %}
                 </div>   
 
             </div>
             <div class="col-4">
-                <div id="index" class="container tab-pane active shadow-sm p-3 m-2  bg-light rounded">
-                    <h5>Locação em Andamento</h5>
+                <div id="index" class="tab-pane active shadow-sm p-3 m-2  bg-light rounded">
+                    <h5>Locação Pendente</h5>
                     <table>
                         <thead>
                             <tr>

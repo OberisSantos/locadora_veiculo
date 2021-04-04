@@ -12,6 +12,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from braces.views import GroupRequiredMixin #para usar o grupo
 from django.contrib.auth.models import Group #para add os grupos
+from datetime import datetime 
 
 # Create your views here.
 #função geral
@@ -21,9 +22,20 @@ def buscar(request):
 
 #page inicial
 def index(request):
-    locacao = Locacao.objects.filter(status_id=1).order_by('-data_devolucao')
+    locacao = Locacao.objects.filter().order_by('-data_devolucao')
+    locacao_ativa = {}
+   
+    locacao_pendente = {}
 
-    return render(request, 'locadora/index.html', {'locacao':locacao})
+    for locacao in locacao:
+        if locacao.status_id == 1:
+            locacao_ativa[locacao] = locacao
+        elif locacao.status_id == 2:
+            locacao_pendente[locacao] = locacao
+
+    #locacao_pendente = Locacao.objects.filter(status_id=2).order_by('-data_devolucao')
+
+    return render(request, 'locadora/index.html', {'locacao':locacao_ativa, 'locacao_pendente':locacao_pendente})
 
 
 # ------------ CAMPOS PARA A FUNÇÃO LOCAÇÃO ---------------- #
@@ -95,7 +107,19 @@ def editar_locacao(request, id):
                 if locacao.status_id == 1 or locacao.status_id == 3: #ativa
                     veiculo.status_id = 2 #ocupado
                 elif locacao.status_id == 2: #finalizada
-                    veiculo.status_id = 1 #disponivel
+                    if locacao.km_saida <= locacao.km_chegada:
+                        veiculo.status_id = 1 #disponivel
+                        veiculo.quilometragem = locacao.km_chegada
+                    else:
+                        objeto = {
+                            'titulo': 'Editar Locação',
+                            'form_locacao': form_locacao,
+                            'locacao': locacao,
+                            'botao': 'Editar',
+                            'error': 'A km de chegada deve ser maior ou igual a de saída',
+                        }
+                        return render(request, 'locadora/editar_locacao.html', objeto)
+                    
             
                 veiculo.save()
 
@@ -123,7 +147,7 @@ def detalhar_locacao(request, id):
 def listar_locacao(request):
     locacao = Locacao.objects.all().order_by('data_devolucao')
 
-    return render(request, 'locadora/index.html', {'locacao':locacao})
+    return render(request, 'locadora/listar_locacao.html', {'locacao':locacao})
 
 # ------------ CAMPOS PARA A FUNÇÃO RESERVA ---------------- #
 def editar_reserva(request, id):
@@ -481,7 +505,7 @@ def editar_cliente(request, id):
         if form_cliente.is_valid():
             cliente = form_cliente.save(commit=False)            
             cliente.save()
-            return redirect(deletar_cliente, id=cliente.id)
+            return redirect(detalhar_cliente, id=cliente.id)
     else:
         form_cliente = ClienteForm(instance=cliente)
         objeto = {
@@ -497,12 +521,20 @@ def deletar_cliente(request, id):
     if request.user.groups.filter(name='Funcionario').exists() or request.user.has_module_perms('Administrador'):
         cliente = get_object_or_404(Cliente, pk=id)
 
+        locacao = Locacao.objects.filter(cliente_id=cliente.id)
+
         if request.method ==  'POST':
             cliente.delete()
             return redirect(listar_cliente)
         else:
-            mensagem = 'o cliente: '
-            return render(request, 'locadora/delete_confirm.html', {'objeto': cliente, 'mensagem':mensagem})
+            conteudos ={
+                'mensagem':'o cliente: ',
+                'objeto': cliente,
+                'restricao': locacao,
+                'aviso': 'O cliente possui locação, tem certeza que dejesa excluir?'
+            }
+            
+            return render(request, 'locadora/delete_confirm.html', conteudos)
     return redirect(index)
 
 
@@ -571,7 +603,7 @@ def editar_funcionario(request, id):
             objeto ={
                 'titulo':'Editar dados do Funcionário',
             }
-            return render(request, 'locadora/tela_sucesso.html', {})
+            return redirect(listar_funcionario)
     else:
         form_funcionario = FuncionarioForm(instance=funcionario)
     objeto = {

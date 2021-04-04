@@ -96,8 +96,8 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-sm-right" >
                                 <h5 class="dropdown-header">Perfíl do Cliente</h5>
-                                <a class="dropdown-item" href="#">Editar Perfíl</a>
-                                <a class="dropdown-item" href="#">Editar Endereço</a>
+                                <a class="dropdown-item" href="{% url 'usuario_editar' %}">Editar Perfíl</a>
+                                <a class="dropdown-item" href="{% url 'endereco_editar'%}">Editar Endereço</a>
                                 <a class="dropdown-item" href="#"></a>
                                 <h5 class="dropdown-header">Perfíl do Usuário</h5>
                                 <a class="dropdown-item" href="">Alterar senha</a>
@@ -137,11 +137,12 @@
     </main>
 
 
-<script src=" {% static 'js/jquery.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/jquery-ui.js' %}"></script>
-<script src="{% static 'js/scripts.js' %}"></script>
+    <script src=" {% static 'js/jquery.min.js' %}"></script>
+    <script src=" {% static 'js/jquery.mask.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
 
 </body>
 </html>
