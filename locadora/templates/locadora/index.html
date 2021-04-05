@@ -19,10 +19,10 @@
         
         <div class="row">
             <div class="col-8">
-                <div id="index" class="tab-pane active shadow-sm p-2 m-2  bg-light rounded">
+                <div id="index" class="tab-pane active shadow p-2 m-2  bg-light rounded">
                     <h5>Locação em Andamento</h5>
                     {% if locacao|length > 0 %}
-                        <table class="table-striped" style="font-size: 0.85rem;" >
+                        <table class="table" style="font-size: 0.75rem;" >
                             <thead>
                                 <tr>
                                     <td scope="col">ID</td>
@@ -32,6 +32,7 @@
                                     <td scope="col">Check-out</td>
                                     <td scope="col">Valor</td>
                                     <td scope="col">Status</td>
+                                    <td scope="col">Ação</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -60,7 +61,7 @@
                                     </td>
                                     <td>
                                         <a href="{% url 'editar_locacao' id=locacao.id %}" title='status'>
-                                            <button type="button" class="btn btn-secondary">Editar</button>
+                                            <button type="button" class="btn btn-secondary">Cheque-out</button>
                                         </a>
                                     </td>
                                 </tr>
@@ -77,40 +78,38 @@
 
             </div>
             <div class="col-4">
-                <div id="index" class="tab-pane active shadow-sm p-3 m-2  bg-light rounded">
+                <div id="index" class="tab-pane active shadow p-3 m-2  bg-light rounded">
                     <h5>Locação Pendente</h5>
-                    <table>
+                    <table style="font-size: .90rem;">
                         <thead>
                             <tr>
-                                <td scope="col">ID</td>
                                 <td scope="col">Placa</td>
                                 <td scope="col">Cliente</td>
                                 <td scope="col">Check-in</td>
                                 <td scope="col">Check-out</td>
+                                <td></td>
                             </tr>
                         </thead>
-                    <tbody>
-                        {% for locacao in locacao %}
-                        <tr>
-                            <th>{{locacao.id}}</th>
-                            <th><a href="">{{locacao.veiculo|upper}}</a></th><!--o link deve levar para detalhes-->
-                            
-                            <!--<td>{{proprietario.data_nascimento|date:"d/m/Y" }}</td>-->
-                            
-                            <td>
-                                <a href="" title='Editar'>
-                                    <button type="button" class="btn btn-secondary">Editar</button>
-                                </a></td>
-                            <td>
-                                <a href="" title='Deletar'>
-                                    <button type="button" class="btn btn-danger">Excluir</button>
-                                </a>
-                            </td>
-                            
-                        </tr>
-                            
-                        {% endfor %}
-                    </tbody>
+                        <tbody>
+                            {% for locacao_pendente in locacao_pendente %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'detalhar_locacao' id=locacao_pendente.id %}">{{locacao_pendente.veiculo|upper}}</a>
+                                    </td><!--o link deve levar para detalhes-->
+                                    <td>{{locacao_pendente.cliente.cpf_cnpj}}</td>
+                                    <td>
+                                        {{locacao_pendente.data_locacao|date:"d/m/y"}}
+                                    </td>
+                                    <td>
+                                        {{locacao_pendente.data_devolucao|date:"d/m/y"}}
+                                    </td>
+                                    <!--<td>{{proprietario.data_nascimento|date:"d/m/Y" }}</td>-->
+                                    
+                                    
+                                </tr>
+                                
+                            {% endfor %}
+                        </tbody>
                     </table>
                 </div>   
 

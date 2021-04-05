@@ -21,9 +21,9 @@ urlpatterns = [
     path('reserva/detalhe/<int:id>/', views.detalhar_reserva, name='detalhar_reserva'),
     path('reserva/listar', views.listar_reserva, name='listar_reserva'),
 
-    path('veiculo/detalhe/<int:id>/', views.detalhar_veiculo, name='detalhar_veiculo'),
+    path('veiculo/detalhe/<int:id>/', views.veiculo_detalhar, name='veiculo_detalhar'),
 
     path('locacao/ativas/listar/', views.listar_locacao_ativas, name='listar_locacao_ativas'),
-    path('locacao/listar/', views.listar_locacao, name='listar_locacao'),
+    path('locacao/all/listar/', views.listar_locacao_all, name='listar_locacao_all'),
 
 ]

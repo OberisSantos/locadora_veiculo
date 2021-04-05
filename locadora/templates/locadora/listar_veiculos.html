@@ -35,9 +35,10 @@
                             <td>
                                 {% if veiculo.status.id == 1 %}
                                     <a href="{% url 'cadastrar_locacao' id=veiculo.id %}"><button type="button" class="btn btn-warning">Locar</button></a>
+                                {% elif veiculo.status.id == 3 %}
+                                    <a href="{% url 'cadastrar_locacao' id=veiculo.id %}"><button type="button" class="btn btn-light">Locar</button></a>
                                 {% else %}
                                     <a href="{% url 'cadastrar_locacao' id=veiculo.id %}"><button type="button" class="btn btn-warning" disabled>Locar</button></a>
-                               
                                 {% endif %}
                             </td>
                             <td><a href="{% url 'editar_veiculo' id=veiculo.id %}"><button type="button" class="btn btn-secondary">Editar</button></a></td>

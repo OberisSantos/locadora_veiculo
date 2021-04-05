@@ -21,6 +21,7 @@ def buscar(request):
     return render(request, 'locadora/buscar.html', {})
 
 
+@login_required(login_url='page_login')
 def adicionar_imagens(request, id):
     veiculo = get_object_or_404(Veiculo, pk=id)
     if request.method == 'POST':
@@ -37,6 +38,7 @@ def adicionar_imagens(request, id):
 
 
 #page inicial
+@login_required(login_url='page_login')
 def index(request):
     locacao = Locacao.objects.filter().order_by('-data_devolucao') #traz todas as locações e ordena por data_devolução
     locacao_ativa = {}
@@ -46,7 +48,7 @@ def index(request):
     for locacao in locacao:
         if locacao.status_id == 1:
             locacao_ativa[locacao] = locacao
-        elif locacao.status_id == 2:
+        elif locacao.status_id == 3:
             locacao_pendente[locacao] = locacao
 
     #locacao_pendente = Locacao.objects.filter(status_id=2).order_by('-data_devolucao')
@@ -89,6 +91,7 @@ def cadastrar_locacao(request, id): #função para cadastrar as locações
     return render(request, 'locadora/cadastrar_locacao.html', objeto)
 
 
+
 @login_required(login_url='page_login') # o usuário precisa está logado 
 def deletar_locacao(request, id):
     #verificar se o usuário logado tem permissão para essa operação
@@ -113,22 +116,24 @@ def deletar_locacao(request, id):
            return render(request, 'locadora/delete_confirm.html', {'objeto': locacao, 'mensagem':mensagem}) 
     return render(request, 'locadora/permissao_invalida.html', {}) 
 
+
 @login_required(login_url='page_login')
-def editar_locacao(request, id):
-    locacao = get_object_or_404(Locacao, pk=id)
+def editar_locacao(request, id): #função para cheque-ou
+    locacao = get_object_or_404(Locacao, pk=id) #recebe a locação
 
     if request.method == 'POST':
         form_locacao = LocacaoForm(request.POST, request.FILES, instance=locacao)
 
-        if form_locacao.is_valid():
+        if form_locacao.is_valid(): 
             locacao = form_locacao.save(commit=False)
-            locacao.save()
+            locacao.save() #salva as alterações
             if Veiculo.objects.filter(pk=locacao.veiculo_id).exists():
                 veiculo = get_object_or_404(Veiculo, pk=locacao.veiculo_id)
 
                 if locacao.status_id == 1 or locacao.status_id == 3: #ativa
                     veiculo.status_id = 2 #ocupado
                 elif locacao.status_id == 2: #finalizada
+                    
                     if locacao.km_saida <= locacao.km_chegada:
                         veiculo.status_id = 1 #disponivel
                         veiculo.quilometragem = locacao.km_chegada
@@ -161,11 +166,13 @@ def editar_locacao(request, id):
 
 
 
+@login_required(login_url='page_login')
 def detalhar_locacao(request, id):
     locacao = get_object_or_404(Locacao, pk=id) 
     return render(request, 'locadora/detalhar_locacao.html', {'locacao':locacao}) 
 
 
+@login_required(login_url='page_login')
 def listar_locacao(request):
     locacao = Locacao.objects.all().order_by('data_devolucao')
 
@@ -197,12 +204,15 @@ def editar_reserva(request, id):
     return render(request, 'locadora/permissao_invalida.html', {})
 
 
+@login_required(login_url='page_login') #preciso está logado para acessar
 def listar_reservas(request):
-    reserva = Reserva.objects.all()
+    if request.user.groups.filter(name='Funcionario').exists() or request.user.has_module_perms('Administrador'):
+        reserva = Reserva.objects.all()
 
-    return render(request, 'locadora/listar_reservas.html', {'reserva':reserva})
+        return render(request, 'locadora/listar_reservas.html', {'reserva':reserva})
+    return redirect(index)
 
-
+@login_required(login_url='page_login') #preciso está logado para acessar
 def deletar_reserva(request, id):
     if request.user.groups.filter(name='Funcionario').exists() or request.user.has_module_perms('Administrador'):
         reserva = get_object_or_404(Reserva, pk=id)
@@ -232,6 +242,7 @@ def deletar_veiculo(request, id):
     return redirect(index)
 
 
+@login_required(login_url='page_login') #preciso está logado para acessar
 def detalhar_veiculo(request, id):
     veiculo = get_object_or_404(Veiculo, pk=id)
 
@@ -264,7 +275,7 @@ def cadastrar_veiculo(request, id):
 
     return render(request, 'locadora/editar_veiculo.html', objeto)
 
-
+@login_required(login_url='page_login') #preciso está logado para acessar
 def editar_veiculo(request, id):
     veiculo = get_object_or_404(Veiculo, pk=id)
 
@@ -289,7 +300,7 @@ def editar_veiculo(request, id):
 
     return render(request, 'locadora/editar_veiculo.html', objeto)
 
-
+@login_required(login_url='page_login') #preciso está logado para acessar
 def listar_veiculo_disponivel(request):
     veiculo = Veiculo.objects.filter(status=1)
 
@@ -311,7 +322,8 @@ def veiculo_filter(request, id):
         
            # return render(request, 'locadora/listar_veiculos.html', objeto)
     return redirect(page_login)
-            
+        
+@login_required(login_url='page_login') #preciso está logado para acessar
 def listar_veiculos(request):
     if request.user.groups.filter(name='Funcionario').exists() or request.user.has_module_perms('Administrador'):
         veiculos = Veiculo.objects.all()
@@ -328,23 +340,24 @@ def listar_veiculos(request):
 # ------------ CAMPOS PARA A CLASSE PROPRIETARIO  ---------------- #
 
 @login_required(login_url='page_login') #preciso está logado para acessar
-def buscar_proprietario(request):
-    dicionario = {}
+def buscar_proprietario(request): #buscar funcionario 
+    dicionario = {} #cria um dicionario para usar na função de busca
         
-    dicionario['titulo'] = 'Buscar Proprietário'
-    dicionario['buscar_por'] = 'CPF ou CNPJ'
+    dicionario['titulo'] = 'Buscar Proprietário' 
+    dicionario['buscar_por'] = 'CPF'
+    dicionario['mascara']='000.000.000-00'
 
     if (request.method == 'POST'):
         prop = request.POST['buscar']
 
-        try:
+        try: #recebe um excep e trata
             #proprietario = get_object_or_404(Proprietario, Q(cpf=prop) | Q (nome__icontains=prop))
-            proprietario = Proprietario.objects.filter(cpf_cnpj=prop)
+            proprietario = Proprietario.objects.filter(cpf_cnpj=prop) #filtra o proprietário pela valor passado
             dicionario['proprietario'] = proprietario
             dicionario['titulo'] = 'Listar Proprietário'
 
             return render(request, 'locadora/listar_proprietario.html', dicionario)
-        except:
+        except: # se apresentar algum erro ele é tratado 
             dicionario['buscar'] = prop
             dicionario['erro'] = True
             return render(request, 'locadora/buscar.html', dicionario)
@@ -355,7 +368,7 @@ def buscar_proprietario(request):
 
 
 @login_required(login_url='page_login') #preciso está logado para acessar
-def deletar_proprietario(request, id):
+def deletar_proprietario(request, id): #essa funcionalidade só para administrador
     #request.user.groups.filter(name='Administrador').exists() or request.user.has_module_perms('Administrador')
     if request.user.has_module_perms('Administrador'):
         proprietario = get_object_or_404(Proprietario, pk=id)
@@ -426,7 +439,7 @@ def cadastrar_proprietario_fisico(request):
     }
     return render(request, 'locadora/editar_pessoa_fisica.html', objeto)
 
-
+@login_required(login_url='page_login') #preciso está logado para acessar
 def detalhar_proprietario(request, id):
     #try:
     proprietario = get_object_or_404(Proprietario, pk=id)
@@ -464,6 +477,7 @@ def listar_proprietario(request):
 
 # ------------ CAMPOS PARA A CLASSE ENDEREÇO ---------------- #
 
+@login_required(login_url='page_login') #preciso está logado para acessar
 def cadastar_endereco(request, id):
     pessoa = get_object_or_404(Pessoa, pk=id)
 
@@ -487,7 +501,7 @@ def cadastar_endereco(request, id):
     }
     return render(request, 'locadora/cadastrar_endereco.html', objeto)
 
-
+@login_required(login_url='page_login') #preciso está logado para acessar
 def editar_endereco(request, id):    
     endereco = get_object_or_404(Endereco,pk=id)
 
@@ -516,6 +530,7 @@ def editar_endereco(request, id):
 
 
 #-------------CAMPOS PARA A CLASSE DE CLIENTE ------------------#
+@login_required(login_url='page_login') #preciso está logado para acessar
 def cadastrar_cliente(request):
     if request.method == 'POST':
         form_cliente = ClienteForm(request.POST)
@@ -534,6 +549,7 @@ def cadastrar_cliente(request):
     }
     return render(request, 'locadora/editar_cliente.html', objeto)
 
+@login_required(login_url='page_login') #preciso está logado para acessar
 def editar_cliente(request, id):
     cliente = get_object_or_404(Cliente, pk=id)
     if request.method == 'POST':
@@ -553,7 +569,7 @@ def editar_cliente(request, id):
     return render(request, 'locadora/editar_cliente.html', objeto)
 
 
-
+@login_required(login_url='page_login') #preciso está logado para acessar
 def deletar_cliente(request, id):
     if request.user.groups.filter(name='Funcionario').exists() or request.user.has_module_perms('Administrador'):
         cliente = get_object_or_404(Cliente, pk=id)
@@ -574,14 +590,14 @@ def deletar_cliente(request, id):
             return render(request, 'locadora/delete_confirm.html', conteudos)
     return redirect(index)
 
-
+@login_required(login_url='page_login') #preciso está logado para acessar
 def detalhar_cliente(request, id):
     cliente = get_object_or_404(Cliente, pk=id)
     endereco = Endereco.objects.filter(pessoa_id = cliente.id)
     
     return render(request, 'locadora/detalhar_cliente.html', {'cliente':cliente, 'endereco':endereco})
     
-
+@login_required(login_url='page_login') #preciso está logado para acessar
 def listar_cliente(request):
     cliente = Cliente.objects.all()    
 
@@ -589,6 +605,7 @@ def listar_cliente(request):
 
 
 #------------CAMPOS PARA FUNÇÃO DE FUNCIONÁRIO ----------------#
+@login_required(login_url='page_login') #preciso está logado para acessar
 def cadastrar_funcionario(request):
     if request.method == 'POST':
         form_funcionario = FuncionarioForm(request.POST)
@@ -627,6 +644,7 @@ def listar_funcionario(request):
     return redirect(page_logout)
 
 
+@login_required(login_url='page_login') #preciso está logado para acessar
 def editar_funcionario(request, id):
     funcionario = get_object_or_404(Funcionario, pk=id)
 
@@ -650,7 +668,7 @@ def editar_funcionario(request, id):
     }
     return render(request, 'locadora/editar_funcionario.html', objeto)
 
-
+@login_required(login_url='page_login') #preciso está logado para acessar
 def deletar_funcionario(request, id):
         if request.user.has_module_perms('Administrador'):
             funcionario = get_object_or_404(Funcionario, pk=id)
@@ -673,8 +691,7 @@ def deletar_funcionario(request, id):
 
 # ------------ CAMPOS PARA A CLASSE USER E LOGIN ---------------- #
 #UsuarioCreationForm
-
-def cadastrar_usuario(request):
+def cadastrar_usuario(request): #todas as vezes que cadastra um novo usuario ele vai para um grupo
     if request.method == 'POST':
         form_usuario = UsuarioCreationForm(request.POST)
         if form_usuario.is_valid():
@@ -723,7 +740,7 @@ def autenticar_user(request):
 
 
 @login_required(login_url='page_login')
-def senha_alterar(request):
+def senha_alterar(request): #função que serve para o usuário logado alter a senha de acesso
     if request.method == "POST":
         form_senha = PasswordChangeForm(request.user, request.POST)
         if form_senha.is_valid():

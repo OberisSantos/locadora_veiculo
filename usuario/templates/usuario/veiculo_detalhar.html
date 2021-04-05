@@ -1,0 +1,60 @@
+{% extends 'usuario/base_usuario.html' %}
+
+
+{% block content %}    
+            
+    <div class="row row-lg-4 shadow-sm p-3 m-1 rounded">
+        <div class="col-lg-4">
+            <img class="mr-3 img-thumbnail" style="width: 20rem;" src="{{veiculo.imagem_perfil.url}}" alt="Imagem">
+            
+        </div>
+                
+        <div class="col-lg-8">
+            <div class="row row-col-1">
+                <table>
+                    <tr>
+                        <td>
+                            <h5 class="text-muted">{{veiculo.marca|upper}} - {{veiculo.modelo|upper}} 
+                                <button type="button" class="btn btn-secondary">R$: {{veiculo.valor_locacao}}/dia</button>
+                            </h5>     
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h6 class="text-muted">Detalhes</h6>
+                        </td>
+                    </tr>
+                    <tr class="text-monospace">
+                        <td>
+                            <span>O veículo possui cor: {{veiculo.cor|upper}}, </span>
+                            <span>motor: {{veiculo.tipo_combustivel|upper}},</span> 
+                        </td>
+                    </tr>
+                    <tr class="text-monospace">
+                        <td>
+                            <span>e possui câmbio: {{veiculo.cambio|upper}},</span>
+                            <span>Ano: {{veiculo.ano|upper}} </span>  
+                        </td>
+                    </tr>
+                </table>
+                
+            </div>
+            <div class="row row-col-1">
+                <table>
+                    <tr>
+                        <td><a href="{% url 'reservar_veiculo' id=veiculo.id %}"><button type="button" class="btn btn-warning">Reservar</button></a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>  
+    </div><br>
+
+    
+    <div class="auth_content ">
+    
+        {% for imagem in imagem %}        
+            <img class="img-fluid img-thumbnail" src="{{imagem.imagem.url}}"  style="max-height: 60vh;">
+        {% endfor %}
+    </div>
+    
+{% endblock %}

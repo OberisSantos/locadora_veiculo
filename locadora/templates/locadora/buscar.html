@@ -11,7 +11,7 @@
             <form class="auth_form" method="post">
                 {% csrf_token %}
                 <label>
-                    <input name='buscar' type="text" placeholder="{{buscar_por}}"/>
+                    <input name='buscar' data-mask ="{{mascara}}" type="text" placeholder="{{buscar_por}}"/>
                 </label>
 
 

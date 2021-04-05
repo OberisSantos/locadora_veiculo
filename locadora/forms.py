@@ -210,7 +210,8 @@ class FuncionarioForm(forms.ModelForm):
                 'class': 'form-control'
             }),
             'salario': forms.TextInput(attrs={
-                'class': 'form-control'
+                'class': 'form-control',
+                'type': 'number'
             }),
             'data_contratacao': forms.DateInput(attrs={
                 'class': 'form-control',
@@ -233,7 +234,7 @@ class VeiculoForm(forms.ModelForm):
             ('CVT ', 'Transmissão Continuamente Variável'),
             ('AUTOMATIZADO DE DUPLA EMBREAGEM', 'Câmbio automatizado com embreagem dupla'),
         )
-        fields = ('placa', 'renavam', 'chassi', 'ano', 'cor', 'n_portas', 'tipo_combustivel', 'cambio', 'quilometragem', 'nivel_tanque', 'modelo', 'marca','valor_locacao', 'proprietario', 'imagem_perfil', 'status', 'observacao')
+        fields = ('placa', 'renavam', 'chassi', 'ano', 'cor', 'n_portas', 'tipo_combustivel', 'cambio', 'quilometragem', 'nivel_tanque', 'modelo', 'marca','valor_locacao', 'imagem_perfil', 'status', 'observacao')
 
         widgets = {
             'placa': forms.TextInput(attrs={'class':'form-control'}),
@@ -249,7 +250,6 @@ class VeiculoForm(forms.ModelForm):
             'quilometragem': forms.TextInput(attrs={'class':'form-control'}),
             'nivel_tanque': forms.TextInput(attrs={'class':'form-control'}),
             'valor_locacao': forms.TextInput(attrs={'class':'form-control'}),
-            'proprietario': forms.Select(attrs={'class':'form-control'}),
             'imagem_perfil': forms.FileInput(attrs={}),
             'status': forms.Select(attrs={'class':'form-control'}),
             'observacao': forms.Textarea(attrs={'class':'form-control'}),
@@ -293,7 +293,8 @@ class LocacaoForm(forms.ModelForm):
                 }),
                 'km_chegada': forms.TextInput(attrs={
                     'class': 'form-control',
-                    'type': 'number'
+                    'type': 'number',
+                    'required':'True'
                 }),
                 'valor_desconto': forms.TextInput(attrs={
                     'class': 'form-control',

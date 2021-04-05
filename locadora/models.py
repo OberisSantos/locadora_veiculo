@@ -122,6 +122,7 @@ class StatusVeiculo(models.Model):
     def __str__(self):
         return self.status
 
+#classe para o veículo
 class Veiculo(models.Model):
     placa = models.CharField(max_length=20, blank=False, unique=True)
     renavam = models.CharField(max_length=15, blank=False, unique=True)
@@ -182,9 +183,10 @@ class StatusLocacao(models.Model):
     def __str__(self):
         return self.status
 
+#classe para armazenar dados da locação
 class Locacao(models.Model):
-    veiculo = models.ForeignKey(Veiculo, null=True, on_delete=models.SET_NULL)
-    cliente = models.ForeignKey(Cliente, null=True, on_delete=models.SET_NULL)
+    veiculo = models.ForeignKey(Veiculo, null=True, on_delete=models.SET_NULL) #recebe o id do veiculo
+    cliente = models.ForeignKey(Cliente, null=True, on_delete=models.SET_NULL)  #recebe o id do cliente
     #funcionario = models.ForeignKey(Funcionario, null=True, on_delete=models.SET_NULL)
 
     data_locacao = models.DateTimeField(blank=True, null=True)
@@ -195,7 +197,7 @@ class Locacao(models.Model):
     km_chegada = models.FloatField(blank=True, null=True)
     valor_diaria = models.FloatField(blank=True, null=True)
     valor_desconto = models.FloatField(blank=True, null=True)
-    valor_total = models.FloatField(blank=True, null=True)   
+    valor_total = models.FloatField(blank=True, null=True)   #aqui é calculado com base na data de locação
     forma_pagamento = models.CharField(max_length=50 ,blank=True, null=True)  
     arquivo = models.FileField(upload_to='locadora/uploads', blank=True, null=True)
     status = models.ForeignKey(StatusLocacao, blank=True, null=True, on_delete=models.SET_NULL, default=1)
@@ -206,12 +208,12 @@ class Locacao(models.Model):
         
         return self.veiculo.placa
     
-
+    #função para calcular o valor total
     def save(self, *args, **kwargs):        
         self.valor_total = (int((self.data_devolucao - self.data_locacao).days) * self.valor_diaria) - self.valor_desconto
         return super(Locacao, self).save(*args, **kwargs)
     
-
+#colocar os status da locação
 class StatusReserva(models.Model):
     status = models.CharField(max_length=100, blank=True, null=True)
     observacao = models.TextField(blank=True, null=True, max_length=150)
@@ -229,7 +231,7 @@ class Reserva(models.Model):
     data_devolucao = models.DateTimeField(blank=True, null=True)
     hora_devolucao = models.TimeField(blank=True, null=True)
     valor_diaria = models.FloatField(blank=True, null=True)
-    valor_total = models.FloatField(blank=True, null=True)
+    valor_total = models.FloatField(blank=True, null=True) #aqui é calculado com base na data de locação
     status = status = models.ForeignKey(StatusReserva, blank=True, null=True, on_delete=models.SET_NULL, default=1)
     
     data_criacao = models.DateTimeField(auto_now_add=True, null=True)

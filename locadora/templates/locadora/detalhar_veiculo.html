@@ -80,6 +80,7 @@
                 </tr>
                 <tr>
                     <td>{{veiculo.valor_locacao}}</td>
+                    <td>{{veiculo.proprietario}}</td>
                     <td>{{veiculo.status}}</td>
                     <td>{{veiculo.data_criacao|date:'d/m/Y - H:i'}}</td>
                     <td>{{veiculo.data_update|date:'d/m/Y - H:i'}}</td>
@@ -108,6 +109,8 @@
                     <td>
                         {% if veiculo.status.id == 1 %}
                             <a href="{% url 'cadastrar_locacao' id=veiculo.id %}"><button type="button" class="btn btn-warning">Locar</button></a>
+                        {% elif veiculo.status.id == 3 %}
+                            <a href="{% url 'cadastrar_locacao' id=veiculo.id %}"><button type="button" class="btn btn-light">Locar</button></a>
                         {% else %}
                             <a href=""><button type="button" class="btn btn-warning" disabled>Locar</button></a>
                     

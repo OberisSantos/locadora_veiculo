@@ -45,7 +45,13 @@
                     <tbody style="font-size:0.85rem;">
                         {% for reserva in reserva %}
                             <tr >
-                                <th scope="row"><a href="">{{reserva.veiculo.id}}</a> </th>
+                                <th scope="row">
+                                    {%if reserva.status.id == 2 %}
+                                        <a href="{% url 'detalhar_veiculo' id=reserva.veiculo.id %}">{{reserva.veiculo.id}}</a>
+                                    {%else %} 
+                                        <a href="">{{reserva.veiculo.id}}</a>
+                                    {% endif %}
+                                </th>
                                 <td>{{reserva.veiculo.placa|upper}}</td>
                                 <td>{{reserva.cliente.nome}}</td>
                                 
@@ -67,7 +73,7 @@
                                     {%endif%}
                                 </td>
                                 
-                            <td><a href="{% url 'deletar_reserva' id=reserva.id %}"><button type="button" class="btn btn-danger">Excluir</button></a></td>
+                                <td><a href="{% url 'deletar_reserva' id=reserva.id %}"><button type="button" class="btn btn-danger">Excluir</button></a></td>
                             </tr>
                         {% endfor %}    
                     

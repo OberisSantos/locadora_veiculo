@@ -42,7 +42,6 @@ def home(request):
 def pesquisar_veiculo(request):
     buscar = request.POST['pesquisar']
 
-    print('buscar ', buscar)
 
     veiculo = Veiculo.objects.filter(
         (Q(marca__contains=buscar)) | 
@@ -53,7 +52,6 @@ def pesquisar_veiculo(request):
         (Q(status=1))
         )
   
-    print('novo ', veiculo)
     return render(request, 'usuario/home.html', {'veiculo':veiculo})
 
 
@@ -87,10 +85,10 @@ def reservar_veiculo(request, id):
 
     return redirect(home)
 
-def detalhar_veiculo(request, id):
+def veiculo_detalhar(request, id):
     veiculo = get_object_or_404(Veiculo, pk=id)
     imagem = ImagensVeiculo.objects.filter(veiculo_id=veiculo.id)
-    return render(request, 'usuario/detalhar_veiculo.html', {'veiculo':veiculo, 'imagem':imagem})
+    return render(request, 'usuario/veiculo_detalhar.html', {'veiculo':veiculo, 'imagem':imagem})
 
 
 
@@ -130,20 +128,20 @@ def listar_locacao_ativas(request):
 
         if cliente:
             locacao = Locacao.objects.filter(cliente_id = cliente.id, status=1)
-            return render(request, 'usuario/listar_locacao.html', {'locacao':locacao})
+            return render(request, 'usuario/locacao_listar.html', {'locacao':locacao})
 
         return redirect(home)
     except:
         return redirect(home)
 
 @login_required(login_url='login_usuario')
-def listar_locacao(request):
+def listar_locacao_all(request):
     try:
         cliente = Cliente.objects.get(usuario_id=request.user.id)
 
         if cliente:
             locacao = Locacao.objects.filter(cliente_id = cliente.id)
-            return render(request, 'usuario/listar_locacao.html', {'locacao':locacao})
+            return render(request, 'usuario/locacao_listar.html', {'locacao':locacao})
 
         return redirect(home)
 
