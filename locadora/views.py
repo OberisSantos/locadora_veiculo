@@ -59,37 +59,38 @@ def index(request):
 # ------------ CAMPOS PARA A FUNÇÃO LOCAÇÃO ---------------- #
 @login_required(login_url='page_login')
 def cadastrar_locacao(request, id): #função para cadastrar as locações
-    veiculo = get_object_or_404(Veiculo, pk=id)
+    if request.user.groups.filter(name='Funcionario').exists() or request.user.has_module_perms('Administrador'):
+        veiculo = get_object_or_404(Veiculo, pk=id)
 
-    if request.method == 'POST':
-        form_locacao = LocacaoForm(request.POST, request.FILES)
+        if request.method == 'POST':
+            form_locacao = LocacaoForm(request.POST, request.FILES)
 
-        if form_locacao.is_valid():
-            locacao = form_locacao.save(commit=False)
-            locacao.veiculo_id = veiculo.id #atribuir o veiculo para a locação 
-            locacao.valor_diaria = veiculo.valor_locacao #atribuir o valor da diária para a locação
-            locacao.km_saida = veiculo.quilometragem #atribuir o valor da diária para a locação
+            if form_locacao.is_valid():
+                locacao = form_locacao.save(commit=False)
+                locacao.veiculo_id = veiculo.id #atribuir o veiculo para a locação 
+                locacao.valor_diaria = veiculo.valor_locacao #atribuir o valor da diária para a locação
+                locacao.km_saida = veiculo.quilometragem #atribuir o valor da diária para a locação
 
-            locacao.save()
-            #aqui vai alterar o status do veículo de acordo o status da locaçao
-            if locacao.status_id == 1 or locacao.status_id == 3: #ativa
-                veiculo.status_id = 2 #ocupado
-            elif locacao.status_id == 2: #finalizada
-                veiculo.status_id = 1 #disponivel
-           
-            veiculo.save()
+                locacao.save()
+                #aqui vai alterar o status do veículo de acordo o status da locaçao
+                if locacao.status_id == 1 or locacao.status_id == 3: #ativa
+                    veiculo.status_id = 2 #ocupado
+                elif locacao.status_id == 2: #finalizada
+                    veiculo.status_id = 1 #disponivel
+            
+                veiculo.save()
 
-            return redirect(detalhar_locacao, id=locacao.id)
-    else:
-        form_locacao = LocacaoForm()
-    objeto = {
-        'titulo': 'Locação de Veículo',
-        'form_locacao': form_locacao,
-        'botao': 'Locar',
-        'veiculo': veiculo,        
-    }
-    return render(request, 'locadora/cadastrar_locacao.html', objeto)
-
+                return redirect(detalhar_locacao, id=locacao.id)
+        else:
+            form_locacao = LocacaoForm()
+        objeto = {
+            'titulo': 'Locação de Veículo',
+            'form_locacao': form_locacao,
+            'botao': 'Locar',
+            'veiculo': veiculo,        
+        }
+        return render(request, 'locadora/cadastrar_locacao.html', objeto)
+    return redirect(index)
 
 
 @login_required(login_url='page_login') # o usuário precisa está logado 
