@@ -3,7 +3,7 @@
 {% block content %}
     <div class="shadow p-3 m-1 rounded">
         <h5>Lista de reservas</h5>
-        {% if esiste == True %}
+        {% if reserva|length > 0 %}
         
             <div class="table-responsive-md">
                 <table class="table">

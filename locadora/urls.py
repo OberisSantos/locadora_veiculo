@@ -27,6 +27,7 @@ urlpatterns = [
     path('', views.page_login, name='page_login'),
     path('logout', views.page_logout, name='page_logout'),
     path('autenticar/usuario', views.autenticar_user, name='autenticar_user'),
+    path('alterar/senha/', views.senha_alterar, name='senha_alterar'),
 
     #path table veiculos
     path('veiculo/listar', views.listar_veiculos, name='listar_veiculos'),
@@ -36,6 +37,7 @@ urlpatterns = [
     path('veiculo/disponivel', views.listar_veiculo_disponivel, name='listar_veiculo_disponivel'),
     path('veiculo/deletar/<int:id>', views.deletar_veiculo, name='deletar_veiculo'),
     path('veiculo/editar/<int:id>', views.editar_veiculo, name='editar_veiculo'),
+    
 
     #path proprietário
     path('proprietario/listar', views.listar_proprietario, name='listar_proprietario'),
@@ -73,8 +75,10 @@ urlpatterns = [
     #path para reserva
     path('listar/reserva', views.listar_reservas, name='listar_reservas'),
     path('reserva/editar/<int:id>/', views.editar_reserva, name='editar_reserva'),
+    path('reserva/deletar/<int:id>/', views.deletar_reserva, name='deletar_reserva'),
 
     #path geral
     path('buscar', views.buscar, name='buscar'),
-    #path('perfil', views.buscar_perfil, name='buscar_perfil'),
+    path('veiculo/imagens/<int:id>', views.adicionar_imagens, name='adicionar_imagens'),
+    
 ]

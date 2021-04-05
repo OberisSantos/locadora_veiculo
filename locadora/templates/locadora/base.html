@@ -99,16 +99,16 @@
                     {% endif %}
                 </ul>
 
-                
-
                 <div class="btn-space">
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="text" placeholder="Pesquisa">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Pesquisar</button>
-                    </form>
+                    <a href="{% url 'cadastrar_usuario' %}">
+                        <button title="Cadastre-se" class="btn btn-secondary">
+                            <i class="bi bi-person-plus-fill"></i>
+                        </button>
+                    </a>
                 </div>
-
                 <div class="btn-space">
+                    
+                    
                     {% if user.is_authenticated %}                                          
                         <div class="dropdown dropleft">
                             <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
@@ -120,16 +120,15 @@
                                 <a class="dropdown-item" href="#">Editar Endereço</a>
                                 <a class="dropdown-item" href="#"></a>
                                 <h5 class="dropdown-header">Perfíl do Usuário</h5>
-                                <a class="dropdown-item" href="">Alterar senha</a>
+                                <a class="dropdown-item" href="{% url 'senha_alterar' %}">Alterar senha</a>
                                 <a class="dropdown-item" href="{% url 'page_logout' %}">Sair</a>
                             </div>
                         </div>
                         
                     {%else%}
-                        <span> Ola, </span>
                         <a href="{% url 'page_login' %}">
-                            <button class="btn btn-sm my-2 my-sm-0 icon-sign-in">
-                                <i style="font-size: 1rem;" class="bi bi-box-arrow-in-right"> Faça seu login </i>
+                            <button title="Login" class="btn btn-info">
+                                <i style="font-size: 1rem;" class="bi bi-box-arrow-in-right"></i>
                             </button>
                         </a> 
 

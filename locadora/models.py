@@ -115,20 +115,6 @@ class Cliente(Pessoa):
     def __str__(self):
         return self.nome
 
-
-class Permissao(models.Model):
-    nome = models.CharField(max_length=100, unique=True)
-
-    def __str__(self):
-        return self.nome
-
-class Perfil(models.Model):
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    permissao = models.ForeignKey(Permissao, on_delete=models.SET_DEFAULT, default=1)
-    
-    def __str__(self):
-        return self.usuario
-
 class StatusVeiculo(models.Model):
     status = models.CharField(max_length=50, blank=True)
     descricao = models.TextField(blank=True, null=True)
@@ -239,8 +225,9 @@ class Reserva(models.Model):
     #funcionario = models.ForeignKey(Funcionario, null=True, on_delete=models.SET_NULL)
 
     data_inicio = models.DateTimeField(blank=True, null=True)
+    hora_inicio = models.TimeField(blank=True, null=True)
     data_devolucao = models.DateTimeField(blank=True, null=True)
-    
+    hora_devolucao = models.TimeField(blank=True, null=True)
     valor_diaria = models.FloatField(blank=True, null=True)
     valor_total = models.FloatField(blank=True, null=True)
     status = status = models.ForeignKey(StatusReserva, blank=True, null=True, on_delete=models.SET_NULL, default=1)

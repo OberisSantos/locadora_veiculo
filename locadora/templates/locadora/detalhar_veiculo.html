@@ -16,9 +16,12 @@
     </div>
     <div class="row">
         <div class="col">
+            <a href="{% url 'adicionar_imagens' id=veiculo.id %}">
+                <button class="btn btn-secondary" type="button">Anexar Imagnes</button>
+            </a>
         
             <table class="table">
-                <caption style="caption-side:top">Dados pessoais</caption>
+                <caption style="caption-side:top">Dados pessoais</caption> 
                 <tr>                
                     <th>Placa</th>  
                     <th>Renavam</th>
@@ -110,6 +113,7 @@
                     
                         {% endif %}
                     </td>
+                 
 
                 </tr>
             </table>

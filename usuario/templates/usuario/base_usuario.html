@@ -62,10 +62,9 @@
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Locação</a>
 
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="">Listar locação ativas</a>
-                                <a class="dropdown-item" href="">Listar todas as locações </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href=""></a>
+                                <a class="dropdown-item" href="{% url 'listar_locacao_ativas' %}">Listar locação ativas</a>
+                                <a class="dropdown-item" href="{% url 'listar_locacao' %}">Listar todas as locações </a>
+                                
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -73,8 +72,7 @@
 
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{% url 'listar_reserva' %}">Listar Reserva</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href=""></a>
+                                
                             </div>
                         </li>
                     {% endif %}
@@ -100,7 +98,7 @@
                                 <a class="dropdown-item" href="{% url 'endereco_editar'%}">Editar Endereço</a>
                                 <a class="dropdown-item" href="#"></a>
                                 <h5 class="dropdown-header">Perfíl do Usuário</h5>
-                                <a class="dropdown-item" href="">Alterar senha</a>
+                                <a class="dropdown-item" href="{% url 'alterar_senha' %}">Alterar senha</a>
                                 <a class="dropdown-item" href="{% url 'logout_usuario' %}">
                                     
                                     <i style="font-size: 1rem;" class="bi bi-box-arrow-in-left">Sair</i>
@@ -111,10 +109,11 @@
                       
 
                     {%else%}
-                        <span> Ola, </span>
+                        <a href="{% url 'criar_usuario' %}"><button title="Cadastre-se" class="btn btn-secondary"><i class="bi bi-person-plus-fill"></i></button></a>
+                        
                         <a href="{% url 'login_usuario' %}">
-                            <button class="btn btn-sm my-2 my-sm-0 icon-sign-in">
-                                <i style="font-size: 1rem;" class="bi bi-box-arrow-in-right"> Faça seu login </i>
+                            <button title="Login" class="btn btn-info">
+                                <i style="font-size: 1rem;" class="bi bi-box-arrow-in-right"></i>
                             </button>
                         </a>  
                         <!-- aria-label="..." on the control -->

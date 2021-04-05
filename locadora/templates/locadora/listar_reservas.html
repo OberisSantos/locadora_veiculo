@@ -49,15 +49,25 @@
                                 <td>{{reserva.veiculo.placa|upper}}</td>
                                 <td>{{reserva.cliente.nome}}</td>
                                 
-                                <td>{{reserva.data_inicio}}</td>
-                                <td>{{reserva.data_devolucao}}</td>
-                                <td>{{reserva.data_criacao}}</td>
+                                <td>{{reserva.data_inicio|date:"d/m/y"}}-{{reserva.hora_inicio|date:"H:i"}}</td>
+                                <td>{{reserva.data_devolucao|date:"d/m/y"}}-{{reserva.hora_devolucao|date:"H:i"}}</td>
+                                <td>{{reserva.data_criacao|date:"d/m/y - H:i" }}</td>
 
                                 <td>{{reserva.valor_diaria}}</td>
                                 <td>{{reserva.valor_total}}</td>
-
-                                <td><a href="{% url 'editar_reserva' id=reserva.id %}"><button type="button" class="btn btn-warning">{{reserva.status}}</button></a></td>
-                            <td><a href=""><button type="button" class="btn btn-danger">Excluir</button></a></td>
+                                
+                                
+                                <td>
+                                    {%if reserva.status.id == 1%}
+                                        <a href="{% url 'editar_reserva' id=reserva.id %}"><button type="button" class="btn btn-warning">{{reserva.status}}</button></a>
+                                    {%elif reserva.status.id == 2 %}  
+                                        <a href="{% url 'editar_reserva' id=reserva.id %}"><button type="button" class="btn btn-success">{{reserva.status}}</button></a>
+                                    {%else%}
+                                        <a href="{% url 'editar_reserva' id=reserva.id %}"><button type="button" class="btn btn-secondary">{{reserva.status}}</button></a>
+                                    {%endif%}
+                                </td>
+                                
+                            <td><a href="{% url 'deletar_reserva' id=reserva.id %}"><button type="button" class="btn btn-danger">Excluir</button></a></td>
                             </tr>
                         {% endfor %}    
                     

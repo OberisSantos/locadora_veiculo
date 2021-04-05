@@ -1,7 +1,9 @@
 from django import forms
 from datetime import datetime
 from django.contrib.auth.models import User #user padrao do django
-from locadora.models import Proprietario, Veiculo, StatusVeiculo, Endereco, Perfil, ImagensVeiculo, Pessoa, Cliente, Locacao, Reserva, Funcionario
+from locadora.models import (
+    Proprietario, Veiculo, StatusVeiculo, Endereco, ImagensVeiculo, 
+    Pessoa, Cliente, Locacao, Reserva, Funcionario, ImagensVeiculo)
 from django.contrib.auth.forms import UserCreationForm
 
 #from django.contrib.auth.forms import UserCreationForm
@@ -23,23 +25,6 @@ class UsuarioCreationForm(UserCreationForm): #usei apensa para teste
                 'class': 'form-control'
             }),
         }
-
-
-class PerfilForm(forms.ModelForm):
-    class Meta:
-        model = Perfil
-        fields = ('usuario', 'permissao')
-       
-        widgets = {
-           'usuario':  forms.Select(attrs={
-                'class': 'form-control'
-            }),
-            'permissao':  forms.Select(attrs={
-                'class': 'form-control'
-            }),
-        }
-
-
 
 
 class EnderecoForm(forms.ModelForm):
@@ -331,17 +316,25 @@ class ReservaForm(forms.ModelForm):
     class Meta:
         model = Reserva
 
-        fields = ('data_inicio', 'data_devolucao', 'status')
+        fields = ('data_inicio', 'hora_inicio', 'data_devolucao', 'hora_devolucao','status')
 
         widgets = {
                 'data_inicio': forms.DateInput(attrs={
                     'class': 'form-control',
                     'type': 'date'
                 }),
+                'hora_inicio': forms.TimeInput(attrs={
+                    'class': 'form-control',
+                    'type': 'time'
+                }),
                 
                 'data_devolucao': forms.DateInput(attrs={
                     'class': 'form-control',
                     'type': 'date'
+                }),
+                'hora_devolucao': forms.TimeInput(attrs={
+                    'class': 'form-control',
+                    'type': 'time'
                 }),
                 'status': forms.Select(attrs={
                     'class': 'form-control',
@@ -349,3 +342,16 @@ class ReservaForm(forms.ModelForm):
                
         }
 
+
+class ImagensForm(forms.ModelForm):
+    class Meta:
+        model = ImagensVeiculo
+        
+        fields = ('imagem',)
+
+        widgets = {
+            'imagem': forms.FileInput(attrs={
+                    'class': 'form-control-files',
+                }),
+               
+        }

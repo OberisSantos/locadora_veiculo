@@ -5,24 +5,40 @@ from django.shortcuts import render, get_object_or_404, redirect
 from locadora.models import Proprietario, Veiculo, Endereco, Pessoa, Cliente, Funcionario, Locacao, Reserva
 from locadora.forms import (
     EnderecoForm, ProprietarioForm, VeiculoForm,  ClienteForm, ReservaForm,
-    UsuarioCreationForm, LocacaoForm, FuncionarioForm
+    UsuarioCreationForm, LocacaoForm, FuncionarioForm, ImagensForm
 )
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from braces.views import GroupRequiredMixin #para usar o grupo
 from django.contrib.auth.models import Group #para add os grupos
 from datetime import datetime 
 
 # Create your views here.
 #função geral
-
+@login_required(login_url='page_login')
 def buscar(request):
     return render(request, 'locadora/buscar.html', {})
 
+
+def adicionar_imagens(request, id):
+    veiculo = get_object_or_404(Veiculo, pk=id)
+    if request.method == 'POST':
+        form_imagens = ImagensForm(request.POST, request.FILES)
+        if form_imagens.is_valid():
+            imagens = form_imagens.save(commit=False)
+            imagens.veiculo_id = veiculo.id
+            imagens.save()
+
+            return redirect(detalhar_veiculo, id=veiculo.id)
+    else:
+        form_imagens = ImagensForm()
+    return render(request, 'locadora/editar_imagens.html', {'form_imagens':form_imagens, 'veiculo':veiculo})
+
+
 #page inicial
 def index(request):
-    locacao = Locacao.objects.filter().order_by('-data_devolucao')
+    locacao = Locacao.objects.filter().order_by('-data_devolucao') #traz todas as locações e ordena por data_devolução
     locacao_ativa = {}
    
     locacao_pendente = {}
@@ -39,7 +55,8 @@ def index(request):
 
 
 # ------------ CAMPOS PARA A FUNÇÃO LOCAÇÃO ---------------- #
-def cadastrar_locacao(request, id):
+@login_required(login_url='page_login')
+def cadastrar_locacao(request, id): #função para cadastrar as locações
     veiculo = get_object_or_404(Veiculo, pk=id)
 
     if request.method == 'POST':
@@ -47,11 +64,12 @@ def cadastrar_locacao(request, id):
 
         if form_locacao.is_valid():
             locacao = form_locacao.save(commit=False)
-            locacao.veiculo_id = veiculo.id
-            locacao.valor_diaria = veiculo.valor_locacao
-            locacao.km_saida = veiculo.quilometragem
+            locacao.veiculo_id = veiculo.id #atribuir o veiculo para a locação 
+            locacao.valor_diaria = veiculo.valor_locacao #atribuir o valor da diária para a locação
+            locacao.km_saida = veiculo.quilometragem #atribuir o valor da diária para a locação
 
             locacao.save()
+            #aqui vai alterar o status do veículo de acordo o status da locaçao
             if locacao.status_id == 1 or locacao.status_id == 3: #ativa
                 veiculo.status_id = 2 #ocupado
             elif locacao.status_id == 2: #finalizada
@@ -70,12 +88,16 @@ def cadastrar_locacao(request, id):
     }
     return render(request, 'locadora/cadastrar_locacao.html', objeto)
 
+
+@login_required(login_url='page_login') # o usuário precisa está logado 
 def deletar_locacao(request, id):
+    #verificar se o usuário logado tem permissão para essa operação
     if request.user.groups.filter(name='Funcionario').exists() or request.user.has_module_perms('Administrador'):
         locacao = get_object_or_404(Locacao, pk=id)
         mensagem = 'a locação do veículo: '
 
         if request.method == 'POST':
+
 
             if locacao.status_id != 1:            
                 locacao.delete()
@@ -89,9 +111,9 @@ def deletar_locacao(request, id):
             return redirect(listar_locacao)
         else:
            return render(request, 'locadora/delete_confirm.html', {'objeto': locacao, 'mensagem':mensagem}) 
-    return render(request, 'locadora/permissao_invalida.html', {})
+    return render(request, 'locadora/permissao_invalida.html', {}) 
 
-
+@login_required(login_url='page_login')
 def editar_locacao(request, id):
     locacao = get_object_or_404(Locacao, pk=id)
 
@@ -150,6 +172,7 @@ def listar_locacao(request):
     return render(request, 'locadora/listar_locacao.html', {'locacao':locacao})
 
 # ------------ CAMPOS PARA A FUNÇÃO RESERVA ---------------- #
+@login_required(login_url='page_login')
 def editar_reserva(request, id):
     if request.user.groups.filter(name='Funcionario').exists() or request.user.has_module_perms('Administrador'):
         reserva = get_object_or_404(Reserva, pk=id)
@@ -180,7 +203,21 @@ def listar_reservas(request):
     return render(request, 'locadora/listar_reservas.html', {'reserva':reserva})
 
 
+def deletar_reserva(request, id):
+    if request.user.groups.filter(name='Funcionario').exists() or request.user.has_module_perms('Administrador'):
+        reserva = get_object_or_404(Reserva, pk=id)
+        mensagem = 'a reserva: '
+
+        if request.method == 'POST':
+            reserva.delete()
+
+            return redirect(listar_reservas)
+        else:
+           return render(request, 'locadora/delete_confirm.html', {'objeto': reserva, 'mensagem':mensagem}) 
+    return redirect(index)
+
 # ------------ CAMPOS PARA A CLASSE VEÍCULO ---------------- #
+@login_required(login_url='page_login')
 def deletar_veiculo(request, id):
     if request.user.groups.filter(name='Funcionario').exists() or request.user.has_module_perms('Administrador'):
         veiculo = get_object_or_404(Veiculo, pk=id)
@@ -302,7 +339,7 @@ def buscar_proprietario(request):
 
         try:
             #proprietario = get_object_or_404(Proprietario, Q(cpf=prop) | Q (nome__icontains=prop))
-            proprietario = get_object_or_404(Proprietario, cpf_cnpj=prop)
+            proprietario = Proprietario.objects.filter(cpf_cnpj=prop)
             dicionario['proprietario'] = proprietario
             dicionario['titulo'] = 'Listar Proprietário'
 
@@ -636,6 +673,7 @@ def deletar_funcionario(request, id):
 
 # ------------ CAMPOS PARA A CLASSE USER E LOGIN ---------------- #
 #UsuarioCreationForm
+
 def cadastrar_usuario(request):
     if request.method == 'POST':
         form_usuario = UsuarioCreationForm(request.POST)
@@ -682,9 +720,25 @@ def autenticar_user(request):
         form_login = AuthenticationForm(request)
     
     return render(request, 'locadora/login.html', {'form_login': form_login})
-      
+
+
+@login_required(login_url='page_login')
+def senha_alterar(request):
+    if request.method == "POST":
+        form_senha = PasswordChangeForm(request.user, request.POST)
+        if form_senha.is_valid():
+            user = form_senha.save()
+            update_session_auth_hash(request, user)
+            return redirect(logout_usuario)
+    else:
+        form_senha = PasswordChangeForm(request.user)
+    return render(request, 'locadora/alterar_senha.html', {'form_senha': form_senha})
+
+
 
 def page_login(request):
+    if request.user:
+        return redirect(page_logout)
     return render(request, 'locadora/login.html', {})
 
 def page_logout(request):

@@ -1,0 +1,59 @@
+{% extends 'usuario/base_usuario.html' %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        
+        <div class="row">
+            <div class="col">
+                
+                <h5>Lista de locação</h5>
+                {% if locacao|length > 0 %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td scope="col">Placa</td>
+                                <td scope="col">Cliente</td>
+                                <td scope="col">Check-in</td>
+                                <td scope="col">Check-out</td>
+                                <td scope="col">Valor</td>
+                                <td scope="col">Status</td>
+                                <td scope="col">Ação</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for locacao in locacao %}
+                                <tr>
+                                    <td>{{locacao.veiculo.placa|upper}}</td>
+                                    <td>{{locacao.cliente.cpf_cnpj}}</td>
+                                    <td>
+                                        {{locacao.data_locacao|date:"d/m/y"}}-
+                                        {{locacao.hora_locacao|date:"h:i"}}
+                                    </td>
+                                    <td>
+                                        {{locacao.data_devolucao|date:"d/m/y"}}-
+                                        {{locacao.hora_devolucao|date:"h:i"}}
+                                    </td>
+                                    <td>R$ {{locacao.valor_total|floatformat:2}}</td>
+                                    <td>
+                                        {% if locacao.status %}
+                                            <span class="badge badge-success"> 
+                                                <i class="bi bi-check2">{{locacao.status}}</i></td>
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                
+                                </tr>
+                                
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {%else%}
+                    <div class="text-center mt-5 mb-5 jumbotron">
+                        <h5>Nenhuma <code>Locação</code></h5>
+                    </div>
+                {%endif%}
+            </div>
+        </div>
+        
+    {% endif %}
+{% endblock %}
